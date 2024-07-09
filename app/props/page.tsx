@@ -6,6 +6,7 @@ import ProposalDetailView from "../components/ProposalDetailView";
 import { Proposal } from "../types"; // Import the shared Proposal type
 import { Box, HStack, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import ProposalUpdates from "../components/ProposalUpdates";
+
 export const NOUNSBUILD_PROPOSALS_QUERY = `
 query proposals(
   $where: Proposal_filter
@@ -79,7 +80,8 @@ const Proposals = () => {
         variables: {
             where: {
                 dao: "0x880fb3cf5c6cc2d7dfc13a993e839a9411200c17"
-            }
+            },
+            first: 100,
         }
     });
 

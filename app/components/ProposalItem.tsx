@@ -63,8 +63,8 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
                     <Text>Status: {proposal.status}</Text>
                 </CardBody>
 
-                <CardFooter>
-                    <Button variant='solid' colorScheme='blue' onClick={onClick}>
+                <CardFooter justify={'right'}>
+                    <Button variant='solid' colorScheme='yellow' onClick={onClick}>
                         View Details
                     </Button>
                 </CardFooter>

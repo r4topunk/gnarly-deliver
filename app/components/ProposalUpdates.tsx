@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Text, VStack } from "@chakra-ui/react";
+import { Box, Text, Textarea, VStack } from "@chakra-ui/react";
 
 type ProposalUpdatesProps = {
     proposalId: string;
@@ -19,6 +19,15 @@ const ProposalUpdates: React.FC<ProposalUpdatesProps> = ({ proposalId }) => {
                     <Text>{update.content}</Text>
                 </Box>
             ))}
+            <Textarea
+                placeholder="Add an update..."
+                size="sm"
+                resize="none"
+                rounded="md"
+                p={4}
+                border="1px"
+                borderColor="gray.200"
+            />
         </VStack>
     );
 };
