@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 import useGraphqlQuery from "../hooks/useGraphqlQuery";
 import ProposalList from "../components/ProposalList";
 import ProposalDetailView from "../components/ProposalDetailView";
-import { Box, HStack } from "@chakra-ui/react";
 import { Proposal } from "../types"; // Import the shared Proposal type
-
+import { Box, HStack, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import ProposalUpdates from "../components/ProposalUpdates";
 export const NOUNSBUILD_PROPOSALS_QUERY = `
 query proposals(
   $where: Proposal_filter
@@ -131,10 +131,25 @@ const Proposals = () => {
                 }}
             >
                 {selectedProposal && (
-                    <ProposalDetailView
-                        proposal={selectedProposal}
-                        loading={listLoading}
-                    />
+                    <Tabs>
+                        <TabList>
+                            <Tab>Proposal Details</Tab>
+                            <Tab>Updates</Tab>
+                        </TabList>
+                        <TabPanels>
+                            <TabPanel>
+                                <ProposalDetailView
+                                    proposal={selectedProposal}
+                                    loading={listLoading}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <ProposalUpdates
+                                    proposalId={selectedProposal.proposalId}
+                                />
+                            </TabPanel>
+                        </TabPanels>
+                    </Tabs>
                 )}
             </Box>
         </HStack>
