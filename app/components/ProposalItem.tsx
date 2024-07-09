@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Card,
     Image,
@@ -13,7 +13,7 @@ import {
 import { Proposal } from "../types";
 
 type ProposalItemProps = {
-    proposal: Proposal | any;
+    proposal: Proposal;
     onClick: () => void;
 };
 
@@ -24,12 +24,22 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
         return match ? match[1] : null;
     };
 
-    const [avatarUrl, setAvatarUrl] = useState<string>(
-        extractImageUrl(proposal.body) || "https://gnars.com/images/logo.png"
-    );
+    const [avatarUrl, setAvatarUrl] = useState<string>(() => {
+        const imageUrl = extractImageUrl(proposal.description);
+        return imageUrl || "https://gnars.com/images/logo.png";
+    });
+
     const handleError = () => {
-        setAvatarUrl("https://gnars.com/images/logo.png"); // Fallback placeholder image
+        setAvatarUrl("https://gnars.com/images/logo.png");
     };
+
+    useEffect(() => {
+        const imageUrl = extractImageUrl(proposal.description);
+        if (imageUrl) {
+            setAvatarUrl(imageUrl);
+        }
+    }, [proposal.description]);
+
     return (
         <Card
             direction={{ base: 'column', sm: 'row' }}
