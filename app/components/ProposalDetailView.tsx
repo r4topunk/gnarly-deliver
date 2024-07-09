@@ -1,6 +1,6 @@
 'use client'
 import React from "react";
-import { Box, Button, HStack, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Spinner, Text, VStack } from "@chakra-ui/react";
 import moment from "moment";
 import { FaArrowLeft } from "react-icons/fa";
 import { RiExternalLinkLine } from "react-icons/ri";
@@ -132,16 +132,14 @@ const ProposalDetailView: React.FC<ProposalDetailViewProps> = ({ proposal, loadi
 
     return (
         <VStack spacing={4} align="stretch" w="full">
-            <HStack justifyContent="space-between">
-                <Button variant="outline" size="sm" >
-                    Delivers
-                </Button>
+            <Flex justifyContent="flex-end">
+
                 <a href={`https://etherscan.io/tx/${proposal.transactionHash}`} target="_blank" rel="noreferrer">
                     <Button variant="outline" size="sm" rightIcon={<RiExternalLinkLine />}>
                         Etherscan
                     </Button>
                 </a>
-            </HStack>
+            </Flex>
             <VStack spacing={2} align="stretch">
                 <Text fontSize="lg" fontWeight="bold">Proposal {proposal.proposalId}</Text>
                 <Text fontSize="md" fontWeight="semibold">{proposal.title}</Text>
