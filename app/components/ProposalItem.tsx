@@ -11,6 +11,9 @@ import {
     Button,
 } from "@chakra-ui/react";
 import { Proposal } from "../types";
+import { useNnsName } from "@nnsprotocol/resolver-wagmi";
+import { useEnsAddress } from "wagmi";
+
 
 type ProposalItemProps = {
     proposal: Proposal;
@@ -18,6 +21,17 @@ type ProposalItemProps = {
 };
 
 const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
+    const [user_wallet, setUserWallet] = useState<string>("");
+
+    const nns = useNnsName({
+        //@ts-ignore
+        address: `${proposal.proposer}`,
+    })
+
+    useEffect(() => {
+        setUserWallet(String(nns.data));
+    }
+        , [nns]);
     const extractImageUrl = (markdown: string): string | null => {
         const imageRegex = /!\[.*?\]\((.*?)\)/;
         const match = imageRegex.exec(markdown);
@@ -58,7 +72,7 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
                 <CardBody>
                     <Heading size='md'>{proposal.title}</Heading>
                     <Text py='2'>
-                        Author: {proposal.proposer}
+                        Author: {String(user_wallet) || proposal.proposer}
                     </Text>
                     <Text>Status: {proposal.status}</Text>
                 </CardBody>

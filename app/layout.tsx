@@ -3,6 +3,8 @@ import { Londrina_Solid } from "next/font/google";
 import "./globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import * as React from "react";
+import { Providers } from "./wagmiProvider";
+import NavBar from "./components/NavBar";
 
 const londrina = Londrina_Solid({ weight: "300", subsets: ["latin"] });
 
@@ -25,9 +27,12 @@ export default function RootLayout({
         <meta name="description" content={metadata.description || ''} />
       </head>
       <body className={londrina.className}>
-        <ChakraProvider>
-          {children}
-        </ChakraProvider>
+        <Providers>
+          <ChakraProvider>
+            <NavBar />
+            {children}
+          </ChakraProvider>
+        </Providers>
       </body>
     </html>
   );
