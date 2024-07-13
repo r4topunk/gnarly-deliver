@@ -1,18 +1,17 @@
 'use client'
-import React, { useEffect, useState } from "react";
 import {
+    Button,
     Card,
+    CardBody,
+    CardFooter,
+    Heading,
     Image,
     Stack,
-    CardBody,
-    Heading,
     Text,
-    CardFooter,
-    Button,
 } from "@chakra-ui/react";
-import { Proposal } from "../types";
 import { useNnsName } from "@nnsprotocol/resolver-wagmi";
-import { useEnsAddress } from "wagmi";
+import React, { useEffect, useState } from "react";
+import { Proposal } from "../types";
 
 
 type ProposalItemProps = {
