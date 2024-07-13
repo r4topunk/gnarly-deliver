@@ -147,7 +147,7 @@ const Proposals = () => {
                             </TabPanel>
                             <TabPanel>
                                 <ProposalUpdates
-                                    proposalId={selectedProposal.proposalId}
+                                    proposal={selectedProposal}
                                 />
                             </TabPanel>
                         </TabPanels>
