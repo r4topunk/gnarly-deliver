@@ -4,7 +4,7 @@ import useGraphqlQuery from "../hooks/useGraphqlQuery";
 import ProposalList from "../components/ProposalList";
 import ProposalDetailView from "../components/ProposalDetailView";
 import { Proposal } from "../types"; // Import the shared Proposal type
-import { Box, HStack, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Box, HStack, Tabs, TabList, TabPanels, Tab, TabPanel, Center, Button } from "@chakra-ui/react";
 import ProposalUpdates from "../components/ProposalUpdates";
 
 export const NOUNSBUILD_PROPOSALS_QUERY = `
@@ -69,7 +69,7 @@ const Proposals = () => {
     const [proposals, setProposals] = useState<Proposal[]>([]);
     const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
     const [proposalLoading, setProposalLoading] = useState<boolean>(false);
-
+    console.log(selectedProposal);
     const {
         data: proposalsData,
         loading: listLoading,
@@ -102,7 +102,6 @@ const Proposals = () => {
                 transactionHash: proposal.transactionHash
             }));
             setProposals(mappedProposals);
-            setSelectedProposal(mappedProposals[0]); // Set the most recent proposal as default
         }
     }, [proposalsData]);
 
@@ -112,19 +111,21 @@ const Proposals = () => {
     };
 
     return (
-        <HStack spacing={4} align="start">
-            <Box maxH={'100vh'} flex={1} p={4} overflow={'auto'}
-                sx={{
-                    '&::-webkit-scrollbar': {
-                        display: 'none'
-                    }
-                }}
-            >
-                <ProposalList
-                    proposals={proposals}
-                    onProposalClick={handleProposalClick}
-                />
-            </Box>
+        <>
+            {selectedProposal === null && (
+                <Box maxH={'100vh'} flex={1} p={4} overflow={'auto'}
+                    sx={{
+                        '&::-webkit-scrollbar': {
+                            display: 'none'
+                        }
+                    }}
+                >
+                    <ProposalList
+                        proposals={proposals}
+                        onProposalClick={handleProposalClick}
+                    />
+                </Box>
+            )}
             <Box maxH={'100vh'} flex={1} p={4} overflow={'auto'}
                 sx={{
                     '&::-webkit-scrollbar': {
@@ -133,28 +134,43 @@ const Proposals = () => {
                 }}
             >
                 {selectedProposal && (
-                    <Tabs>
-                        <TabList>
-                            <Tab>Proposal Details</Tab>
-                            <Tab>Updates</Tab>
-                        </TabList>
-                        <TabPanels>
-                            <TabPanel>
-                                <ProposalDetailView
-                                    proposal={selectedProposal}
-                                    loading={listLoading}
-                                />
-                            </TabPanel>
-                            <TabPanel>
-                                <ProposalUpdates
-                                    proposal={selectedProposal}
-                                />
-                            </TabPanel>
-                        </TabPanels>
-                    </Tabs>
+                    <Box
+                        maxW={{ base: '100%', sm: '800px' }}
+                    >
+                        <Button
+                            onClick={() => setSelectedProposal(null)}
+                            mb={4}
+                        >
+                            Back
+                        </Button>
+                        <Center>
+
+                            <Tabs>
+                                <TabList>
+                                    <Center>
+                                        <Tab>Proposal Details</Tab>
+                                        <Tab>Updates</Tab>
+                                    </Center>
+                                </TabList>
+                                <TabPanels>
+                                    <TabPanel>
+                                        <ProposalDetailView
+                                            proposal={selectedProposal}
+                                            loading={listLoading}
+                                        />
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <ProposalUpdates
+                                            proposal={selectedProposal}
+                                        />
+                                    </TabPanel>
+                                </TabPanels>
+                            </Tabs>
+                        </Center>
+                    </Box>
                 )}
             </Box>
-        </HStack>
+        </>
     );
 };
 
