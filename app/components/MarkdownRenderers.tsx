@@ -1,4 +1,5 @@
 "use client";
+import { Image } from "@chakra-ui/react";
 import React from "react";
 
 type MarkdownProps = {
@@ -23,7 +24,7 @@ export const MarkdownRenderers = {
                 alignItems: "center",
             }}
         >
-            <img
+            <Image
                 {...props}
                 alt={alt}
                 src={src}

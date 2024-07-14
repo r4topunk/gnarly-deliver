@@ -1,5 +1,6 @@
 // path: /components/NavBar.tsx
 
+import { Image } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 // generate a nice horizontal navbar for the top of the page with tailwindcss
 
@@ -10,7 +11,7 @@ export default function NavBar() {
                 <div className="relative flex items-center justify-between h-16">
                     <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                         <div className="flex-shrink-0 flex items-center">
-                            <img
+                            <Image
                                 className="hidden lg:block h-8 w-auto"
                                 src="https://gnars.com/images/logo.png"
                                 alt="Workflow"

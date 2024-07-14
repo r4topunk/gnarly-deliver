@@ -61,6 +61,7 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
       mb={4} // Adds some space between cards
     >
       <Image
+        alt="Proposal Image"
         src={avatarUrl}
         objectFit="cover"
         maxW={{ base: "100%", sm: "200px" }}

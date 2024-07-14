@@ -24,7 +24,7 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
   const user_account = useAccount();
   const [userWallet, setUserWallet] = useState<string>("");
 
-  const onStart = async () => {};
+  const onStart = async () => { };
 
   useEffect(() => {
     onStart();
@@ -78,7 +78,7 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
 
       <VStack mt={4}>
         {updates && updates.length > 0
-          ? updates.map((update) => <UpdateBody update={update} />)
+          ? updates.map((update) => <UpdateBody key={update.id} update={update} />)
           : ""}
       </VStack>
     </Box>

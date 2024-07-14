@@ -6,7 +6,7 @@ import { useAllUpdates } from "./hooks/useUpdates";
 
 const Home = () => {
   const { updates, setUpdates } = useAllUpdates();
-  
+
   return (
     <Container maxW="3xl" marginBlock={4}>
       <Text fontSize="4xl" width="full" textAlign={"center"} fontWeight="bold">
@@ -14,7 +14,7 @@ const Home = () => {
       </Text>
       <VStack mt={4}>
         {updates && updates.length > 0
-          ? updates.map((update) => <UpdateBody update={update} />)
+          ? updates.map((update) => <UpdateBody key={update.id} update={update} />)
           : ""}
       </VStack>
     </Container>
