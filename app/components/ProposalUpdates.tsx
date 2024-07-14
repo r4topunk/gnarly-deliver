@@ -1,10 +1,10 @@
 "use client";
 
-import { createClient } from "../utils/supabase/client";
+import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Proposal } from "../types";
 import { useAccount } from "wagmi";
-import { set } from "lodash";
+import { Proposal } from "../types";
+import { createClient } from "../utils/supabase/client";
 
 interface Update {
     id: number;
@@ -70,13 +70,7 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
     };
 
     return (
-        <div>
-            {/* <button
-                className="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-                onClick={onStart}
-            >
-                reFetch
-            </button> */}
+        <Box w={"full"} id="teste">
             <h4 className=" font-semibold mb-2"> Connected User: {userWallet}</h4>
             {proposal.proposer === userWallet.toLowerCase() ? (
                 <>
@@ -108,7 +102,7 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
                     : ""}
             </ul>
 
-        </div>
+        </Box>
     );
 }
 
