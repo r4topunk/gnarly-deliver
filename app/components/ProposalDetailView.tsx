@@ -70,21 +70,21 @@ type AddressInfoProps = {
 };
 
 const AddressInfo: React.FC<AddressInfoProps> = ({ label, address }) => {
-    const href = `https://etherscan.io/address/${address}/`;
+    const href = `https://basescan.io/address/${address}/`;
 
     if (!address) {
         return null;
     }
 
     return (
-        <VStack alignItems="flex-start" overflow="hidden">
+        <HStack alignItems="flex-start" overflow="hidden">
             <Text fontSize="xs" color="gray.500">{label}</Text>
             <a href={href} target="_blank" rel="noreferrer">
                 <Text fontSize="xs" color="red.500" fontWeight="medium" isTruncated>
                     {address}
                 </Text>
             </a>
-        </VStack>
+        </HStack>
     );
 };
 
@@ -132,18 +132,22 @@ const ProposalDetailView: React.FC<ProposalDetailViewProps> = ({ proposal, loadi
 
     return (
         <VStack spacing={4} align="stretch" w="full">
-            <Flex justifyContent="flex-end">
 
-                <a href={`https://etherscan.io/tx/${proposal.transactionHash}`} target="_blank" rel="noreferrer">
-                    <Button variant="outline" size="sm" rightIcon={<RiExternalLinkLine />}>
-                        Etherscan
-                    </Button>
-                </a>
-            </Flex>
             <VStack spacing={2} align="stretch">
-                <Text fontSize="lg" fontWeight="bold">Proposal {proposal.proposalId}</Text>
-                <Text fontSize="md" fontWeight="semibold">{proposal.title}</Text>
+                {/* <Text fontSize="lg" fontWeight="bold">Proposal {proposal.proposalId}</Text> */}
+                <Flex justifyContent="space-between">
+                    <VStack>
+
+                        <Text fontSize="36px" fontWeight="semibold">{proposal.title}</Text>
+                    </VStack>
+                    <a href={`https://basescan.io/tx/${proposal.transactionHash}`} target="_blank" rel="noreferrer">
+                        <Button variant="outline" size="sm" rightIcon={<RiExternalLinkLine />}>
+                            BaseScan
+                        </Button>
+                    </a>
+                </Flex>
                 <AddressInfo label="Proposed by" address={proposal.proposer} />
+
             </VStack>
             <HStack spacing={2}>
                 <VoteStat label="For" value={votes.for} total={totalVotes} progressColor="green.500" />

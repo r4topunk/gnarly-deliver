@@ -24,11 +24,8 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
   const user_account = useAccount();
   const [userWallet, setUserWallet] = useState<string>("");
 
-  const onStart = async () => { };
 
-  useEffect(() => {
-    onStart();
-  }, [proposal]);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,16 +34,15 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
       const { data, error } = await supabase.from("updates").insert([
         {
           id: id_index,
-          author: userWallet, // Replace with the current user's name or ID
+          author: userWallet,
           comment_body: newComment,
-          created_at: new Date().toISOString(), // updated column name
+          created_at: new Date().toISOString(),
           likes: 0,
           proposal_id: proposal.proposalId,
         },
       ]);
       if (error) throw error;
       setNewComment("");
-      onStart();
     } catch (err) {
       console.error(err);
     }

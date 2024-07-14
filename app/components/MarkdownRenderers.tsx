@@ -121,7 +121,7 @@ export const MarkdownRenderers = {
             <ul
                 {...props}
                 data-ordered={listType}
-                style={{ padding: "5%", paddingLeft: "10%", color: "white" }}
+                style={{ padding: "5%", paddingLeft: "10%", color: "darkblue" }}
             >
                 {children}
             </ul>
