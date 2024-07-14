@@ -64,9 +64,7 @@ export default function NavBar() {
                         </Link>
                     </Flex>
                 </Flex>
-                <Flex alignItems="center">
-                    <ConnectButton />
-                </Flex>
+                <ConnectButton />
             </Flex>
         </Box>
     );

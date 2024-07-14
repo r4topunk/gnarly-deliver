@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -17,6 +18,7 @@ import ProposalStatus from "./ProposalStatus";
 import { createClient } from "../utils/supabase/client";
 import getSummary from "../lib/getAiSummary";
 import useMemoizedNnsName from "../hooks/useNNS";
+import useEnsDetails from "../hooks/useEnsAvatar";
 
 type ProposalItemProps = {
   proposal: Proposal;
@@ -26,6 +28,7 @@ type ProposalItemProps = {
 const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
   const supabase = createClient();
   const userWallet = useMemoizedNnsName(proposal.proposer as `0x${string}`);
+  const ensAvatar = useEnsDetails(proposal.proposer as `0x${string}`);
 
   const extractImageUrl = (markdown: string): string | null => {
     const imageRegex = /!\[.*?\]\((.*?)\)/;
@@ -117,8 +120,11 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
             <Box width={"full"} marginRight={4}>
               <HStack>
                 <Box ml={2}>
-                  <Heading size="md">{proposal.title}</Heading>
-                  <Text py="2">Author: {String(userWallet) || proposal.proposer}</Text>
+                  <Text fontSize="26px">{proposal.title}</Text>
+                  <HStack>
+                    <Avatar src={ensAvatar?.ensAvatar || "/loading.gif"} size="sm" />
+                    <Text py="2">{String(userWallet) || proposal.proposer}</Text>
+                  </HStack>
                 </Box>
                 {/* <Box justifyContent={"flex-end"}><ProposalStatus status={proposal.status} /></Box> */}
               </HStack>

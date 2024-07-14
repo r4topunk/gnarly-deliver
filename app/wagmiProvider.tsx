@@ -7,9 +7,6 @@ import {
 import { WagmiProvider } from 'wagmi';
 import {
     mainnet,
-    polygon,
-    optimism,
-    arbitrum,
     base,
 } from 'wagmi/chains';
 import {
@@ -20,8 +17,8 @@ import {
 const config = getDefaultConfig({
     appName: 'Gnars',
     projectId: '752fee4818746ba72ef88000b0b95d3e',
-    chains: [mainnet, polygon, optimism, arbitrum, base],
-    ssr: true, // If your dApp uses server side rendering (SSR)
+    chains: [mainnet, base],
+    ssr: true,
 });
 
 
