@@ -1,13 +1,13 @@
 "use client";
 import {
-    Box,
-    Button,
-    Center,
-    Tab,
-    TabList,
-    TabPanel,
-    TabPanels,
-    Tabs,
+  Box,
+  Button,
+  Center,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import ProposalDetailView from "../components/ProposalDetailView";
@@ -139,27 +139,25 @@ const Proposals = () => {
             <Button onClick={() => setSelectedProposal(null)} mb={4}>
               Back
             </Button>
-            <Center>
-              <Tabs>
-                <TabList>
-                  <Center>
-                    <Tab>Proposal Details</Tab>
-                    <Tab>Updates</Tab>
-                  </Center>
-                </TabList>
-                <TabPanels>
-                  <TabPanel>
-                    <ProposalDetailView
-                      proposal={selectedProposal}
-                      loading={listLoading}
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <ProposalUpdates proposal={selectedProposal} />
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Center>
+            <Tabs w="full">
+              <TabList>
+                <Center>
+                  <Tab>Proposal Details</Tab>
+                  <Tab>Updates</Tab>
+                </Center>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <ProposalDetailView
+                    proposal={selectedProposal}
+                    loading={listLoading}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  <ProposalUpdates proposal={selectedProposal} />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
           </Box>
         )}
       </Box>
