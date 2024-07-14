@@ -1,4 +1,4 @@
-"use client";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -12,29 +12,21 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useNnsName } from "@nnsprotocol/resolver-wagmi";
-import React, { useEffect, useState } from "react";
 import { Proposal } from "../types";
 import ProposalStatus from "./ProposalStatus";
 import { createClient } from "../utils/supabase/client";
 import getSummary from "../lib/getAiSummary";
+import useMemoizedNnsName from "../hooks/useNNS";
+
 type ProposalItemProps = {
   proposal: Proposal;
   onClick: () => void;
 };
 
 const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
-  const [user_wallet, setUserWallet] = useState<string>("");
   const supabase = createClient();
+  const userWallet = useMemoizedNnsName(proposal.proposer as `0x${string}`);
 
-  const nns = useNnsName({
-    //@ts-ignore
-    address: `${proposal.proposer}`,
-  });
-
-  useEffect(() => {
-    setUserWallet(String(nns.data));
-  }, [nns]);
   const extractImageUrl = (markdown: string): string | null => {
     const imageRegex = /!\[.*?\]\((.*?)\)/;
     const match = imageRegex.exec(markdown);
@@ -56,7 +48,6 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
       setAvatarUrl(imageUrl);
     }
   }, [proposal.description]);
-
 
   const [aiSummary, setAiSummary] = useState<string>("");
 
@@ -109,15 +100,8 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
     fetchAiSummary();
   }, [proposal.proposalId, proposal.description]);
 
-
-
   return (
-    <Card
-      direction={{ base: "column", sm: "row" }}
-      overflow="hidden"
-      variant="outline"
-      mb={4}
-    >
+    <Card direction={{ base: "column", sm: "row" }} overflow="hidden" variant="outline" mb={4}>
       <Image
         alt="Proposal Image"
         src={avatarUrl}
@@ -131,35 +115,21 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
         <CardBody display={"flex"}>
           <VStack>
             <Box width={"full"} marginRight={4}>
-
               <HStack>
                 <Box ml={2}>
                   <Heading size="md">{proposal.title}</Heading>
-                  <Text py="2">
-                    Author: {String(user_wallet) || proposal.proposer}
-                  </Text>
+                  <Text py="2">Author: {String(userWallet) || proposal.proposer}</Text>
                 </Box>
-                {/* <Box
-                  justifyContent={"flex-end"}>
-
-                  <ProposalStatus status={proposal.status} />
-                </Box> */}
+                {/* <Box justifyContent={"flex-end"}><ProposalStatus status={proposal.status} /></Box> */}
               </HStack>
-
             </Box>
-            <Box
-              display={"flex"}
-              flexDirection={"column"}
-              justifyContent={"space-between"}
-              alignItems={"flex-end"}
-            >
+            <Box display={"flex"} flexDirection={"column"} justifyContent={"space-between"} alignItems={"flex-end"}>
               <Text fontSize="sm" color="gray.500">
                 {aiSummary}
               </Text>
             </Box>
           </VStack>
         </CardBody>
-
         <CardFooter justify={"right"}>
           <Button variant="solid" colorScheme="yellow" onClick={onClick}>
             View Details

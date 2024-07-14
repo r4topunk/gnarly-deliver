@@ -1,58 +1,73 @@
-// path: /components/NavBar.tsx
-
-import { Image } from "@chakra-ui/react";
+import { Box, Flex, Link, Image, Button } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-// generate a nice horizontal navbar for the top of the page with tailwindcss
 
 export default function NavBar() {
     return (
-        <nav className="bg-gray-800">
-            <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-                <div className="relative flex items-center justify-between h-16">
-                    <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-                        <div className="flex-shrink-0 flex items-center">
-                            <Image
-                                className="hidden lg:block h-8 w-auto"
-                                src="https://gnars.com/images/logo.png"
-                                alt="Workflow"
-                            />
-                        </div>
-                        <div className="hidden sm:block sm:ml-6">
-                            <div className="flex space-x-4">
-                                <a
-                                    href="/proposals"
-                                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                                >
-                                    Proposals
-                                </a>
-                                <a
-                                    href="/"
-                                    className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
-                                >
-                                    Updates
-                                </a>
-
-                                <a
-                                    href="#"
-                                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                                >
-                                    Auction
-                                </a>
-                                <a
-                                    href="#"
-                                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                                >
-                                    Docs
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:pr-0">
-                        <ConnectButton />
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <Box bg="gray.800" px={4}>
+            <Flex h={16} alignItems="center" justifyContent="space-between" maxW="7xl" mx="auto">
+                <Flex alignItems="center">
+                    <Image
+                        display={{ base: "none", lg: "block" }}
+                        h={8}
+                        w="auto"
+                        src="https://gnars.com/images/logo.png"
+                        alt="Workflow"
+                    />
+                    <Flex ml={10} display={{ base: "none", sm: "flex" }} >
+                        <Link
+                            href="/proposals"
+                            px={3}
+                            py={2}
+                            rounded="md"
+                            fontSize="sm"
+                            fontWeight="medium"
+                            color="gray.300"
+                            _hover={{ bg: "gray.700", color: "white" }}
+                        >
+                            Proposals
+                        </Link>
+                        <Link
+                            href="/"
+                            px={3}
+                            py={2}
+                            rounded="md"
+                            fontSize="sm"
+                            fontWeight="medium"
+                            bg="gray.900"
+                            color="white"
+                        >
+                            Updates
+                        </Link>
+                        <Link
+                            href="#"
+                            px={3}
+                            py={2}
+                            rounded="md"
+                            fontSize="sm"
+                            fontWeight="medium"
+                            color="gray.300"
+                            _hover={{ bg: "gray.700", color: "white" }}
+                        >
+                            Auction
+                        </Link>
+                        <Link
+                            href="https://gnarsdocs.vercel.app"
+                            px={3}
+                            py={2}
+                            rounded="md"
+                            fontSize="sm"
+                            fontWeight="medium"
+                            color="gray.300"
+                            _hover={{ bg: "gray.700", color: "white" }}
+                        >
+                            Docs
+                        </Link>
+                    </Flex>
+                </Flex>
+                <Flex alignItems="center">
+                    <ConnectButton />
+                </Flex>
+            </Flex>
+        </Box>
     );
-
 }

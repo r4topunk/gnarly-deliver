@@ -74,7 +74,7 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
 
       <VStack mt={4}>
         {updates && updates.length > 0
-          ? updates.map((update) => <UpdateBody key={update.id} update={update} />)
+          ? updates.map((update) => <UpdateBody key={update.id} update={update} author={proposal.proposer} />)
           : ""}
       </VStack>
     </Box>
