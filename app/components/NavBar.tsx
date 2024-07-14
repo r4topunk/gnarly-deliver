@@ -1,6 +1,5 @@
 // path: /components/NavBar.tsx
 
-import React from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 // generate a nice horizontal navbar for the top of the page with tailwindcss
 
@@ -20,10 +19,16 @@ export default function NavBar() {
                         <div className="hidden sm:block sm:ml-6">
                             <div className="flex space-x-4">
                                 <a
-                                    href="#"
+                                    href="/"
                                     className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
                                 >
-                                    Dashboard
+                                    Updates
+                                </a>
+                                <a
+                                    href="/proposals"
+                                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                                >
+                                    Proposals
                                 </a>
                                 <a
                                     href="#"

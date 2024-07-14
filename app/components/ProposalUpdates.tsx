@@ -1,26 +1,19 @@
 "use client";
 
-import { Box, Card, Text, VStack } from "@chakra-ui/react";
+import { Box, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import useUpdates from "../hooks/useUpdates";
 import { Proposal } from "../types";
 import { createClient } from "../utils/supabase/client";
-
-interface Update {
-  id: number;
-  author: string;
-  comment_body: string;
-  created_at: string; // updated column name
-  likes: number;
-  proposal_id: string; // updated type
-}
+import UpdateBody from "./UpdateBody";
 
 interface ProposalUpdatesProps {
   proposal: Proposal;
 }
 
 function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
-  const [updates, setupdates] = useState<Update[]>([]);
+  const { updates, setUpdates } = useUpdates(proposal.proposalId);
   const supabase = createClient();
   const [author, setAuthor] = useState<string>("");
   const [comment_body, setComment_body] = useState<string>("");
@@ -31,18 +24,7 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
   const user_account = useAccount();
   const [userWallet, setUserWallet] = useState<string>("");
 
-  const onStart = async () => {
-    try {
-      const { data: updates } = await supabase
-        .from("updates")
-        .select()
-        .eq("proposal_id", proposal.proposalId);
-      setupdates(updates as Update[]);
-      setUserWallet(String(user_account.address));
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const onStart = async () => {};
 
   useEffect(() => {
     onStart();
@@ -96,22 +78,7 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
 
       <VStack mt={4}>
         {updates && updates.length > 0
-          ? updates.map((update) => (
-              <Card
-                direction={{ base: "column", sm: "row" }}
-                overflow="hidden"
-                variant="outline"
-                key={update.id}
-                w={"full"}
-                p={4}
-              >
-                <VStack align={"left"} gap={0} w={"full"}>
-                  <Text fontSize={18}>{update.author}</Text>
-                  <Text fontSize={14}>{update.comment_body}</Text>
-                </VStack>
-                {update.created_at}
-              </Card>
-            ))
+          ? updates.map((update) => <UpdateBody update={update} />)
           : ""}
       </VStack>
     </Box>
