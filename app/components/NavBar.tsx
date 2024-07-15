@@ -1,28 +1,33 @@
 'use client';
-import { Box, Flex, Link, Image, useBreakpointValue, } from "@chakra-ui/react";
+import { Box, Flex, Link, Image, useBreakpointValue } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
 
 export default function NavBar() {
-    const [isMobile, setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(false);
+
     useEffect(() => {
-        if (window) {
-            const isMobile = window.innerWidth < 768
-            setIsMobile(isMobile)
-        }
-    }, [])
+        const handleResize = () => {
+            const isMobile = window.innerWidth < 768;
+            setIsMobile(isMobile);
+        };
+        window.addEventListener("resize", handleResize);
+        handleResize();
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
     return (
         <Box bg="gray.800" px={4}>
             <Flex h={16} alignItems="center" justifyContent="space-between" maxW="7xl" mx="auto">
                 <Flex alignItems="center">
                     <Image
-                        display={{ base: "none", lg: "block" }}
+                        display={{ base: "block", lg: "block" }}
                         h={8}
                         w="auto"
                         src="https://gnars.com/images/logo.png"
                         alt="Workflow"
                     />
-                    <Flex ml={10} display={{ base: "none", sm: "flex" }}>
+                    <Flex >
                         <Link
                             href="/proposals"
                             px={3}
@@ -75,8 +80,8 @@ export default function NavBar() {
                 </Flex>
                 <ConnectButton
                     accountStatus={isMobile ? "avatar" : "address"}
-                    chainStatus={isMobile ? "icon" : "full"}
-                    showBalance={isMobile}
+                    chainStatus={isMobile ? "none" : "icon"}
+                    showBalance={isMobile ? false : true}
                     label="Connect Wallet"
                 />
             </Flex>
