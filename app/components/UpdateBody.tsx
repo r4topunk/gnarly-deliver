@@ -1,36 +1,66 @@
-'use client'
-import { Card, Text, VStack, HStack, Avatar, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Box } from '@chakra-ui/react';
-import { Update } from '../hooks/useUpdates';
-import { useState } from 'react';
-import useEnsDetails from '../hooks/useEnsDetails';
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
-import remarkGfm from 'remark-gfm';
-import { MarkdownRenderers } from './MarkdownRenderers';
-import { formatDistanceToNow } from 'date-fns';
+"use client";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  Avatar,
+  Box,
+  Card,
+  HStack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
+import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
+import useEnsDetails from "../hooks/useEnsDetails";
+import { Update } from "../hooks/useUpdates";
+import { MarkdownRenderers } from "./MarkdownRenderers";
 
 const formatRelativeDate = (dateString: string) => {
   const date = new Date(dateString);
   return formatDistanceToNow(date, { addSuffix: true });
 };
 
-function UpdateBody({ update, author }: { update: Update, author: string }) {
-  const { ensName, ensAvatar, isLoading } = useEnsDetails(update.author as `0x${string}`);
-  const [isExpanded, setIsExpanded] = useState(false);
+function UpdateBody({
+  update,
+  author,
+  open = false,
+}: {
+  update: Update;
+  author: string;
+  open?: boolean;
+}) {
+  const { ensName, ensAvatar, isLoading } = useEnsDetails(
+    update.author as `0x${string}`,
+  );
+  const [isExpanded, setIsExpanded] = useState(open);
 
   return (
     <Card
       direction={{ base: "column", sm: "row" }}
+      variant={open ? "unstyled" : "outline"}
       overflow="hidden"
-      variant="outline"
       key={update.id}
       w={"full"}
       p={4}
     >
       <VStack align={"left"} gap={0} w={"full"}>
-        <HStack>
-          <Avatar src={isLoading ? '/loading.gif' : ensAvatar || '/loading.gif'} size="sm" />
-          <Text fontSize={18}>{ensName}</Text>
+        <HStack w={"full"} justify={"space-between"}>
+          <HStack>
+            <Avatar
+              src={isLoading ? "/loading.gif" : ensAvatar || "/loading.gif"}
+              size="sm"
+            />
+            <Text fontSize={18}>{ensName}</Text>
+          </HStack>
+          <Link href={`/update/${update.id}`}>
+            {formatRelativeDate(update.created_at)}
+          </Link>
         </HStack>
         <Box
           h={isExpanded ? "100%" : "80px"}
@@ -42,7 +72,7 @@ function UpdateBody({ update, author }: { update: Update, author: string }) {
             },
             "&::-webkit-scrollbar-thumb": {
               display: "none",
-            }
+            },
           }}
         >
           <ReactMarkdown
@@ -64,18 +94,19 @@ function UpdateBody({ update, author }: { update: Update, author: string }) {
             />
           )}
         </Box>
-        <Accordion allowToggle onChange={() => setIsExpanded(!isExpanded)}>
-          <AccordionItem border="none">
-            <AccordionButton>
-              <Box as="span" flex="1" textAlign="left">
-                {isExpanded ? "Show Less" : "Show More"}
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </AccordionItem>
-        </Accordion>
+        {open === false && update.comment_body.length > 30 && (
+          <Accordion allowToggle onChange={() => setIsExpanded(!isExpanded)}>
+            <AccordionItem border="none">
+              <AccordionButton>
+                <Box as="span" flex="1" textAlign="left">
+                  {isExpanded ? "Show Less" : "Show More"}
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+            </AccordionItem>
+          </Accordion>
+        )}
       </VStack>
-      <Text>{formatRelativeDate(update.created_at)}</Text>
     </Card>
   );
 }
