@@ -53,7 +53,7 @@ export default function NavBar() {
                             Updates
                         </Link>
                         <Link
-                            href="#"
+                            href="https://nouns.build/dao/base/0x880fb3cf5c6cc2d7dfc13a993e839a9411200c17/6030?tab=activity"
                             px={3}
                             py={2}
                             rounded="md"
