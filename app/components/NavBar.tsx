@@ -1,10 +1,13 @@
 'use client';
-import { Box, Flex, Link, Image, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, Image, Link } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
+import { BASE_MULTISIG_ADDRESS, BASE_SENDIT_TOKEN_ADDRESS, BASE_USDC_TOKEN_ADDRESS } from "../constants/contratos";
+import { getTokensValues } from "../utils/web3";
 
 export default function NavBar() {
     const [isMobile, setIsMobile] = useState(false);
+    const [teste, setTeste] = useState()
 
     useEffect(() => {
         const handleResize = () => {
@@ -13,7 +16,17 @@ export default function NavBar() {
         };
         window.addEventListener("resize", handleResize);
         handleResize();
+        initTeste()
         return () => window.removeEventListener("resize", handleResize);
+
+        async function initTeste() {
+            const multisigTokens = await getTokensValues(BASE_MULTISIG_ADDRESS, [
+                BASE_USDC_TOKEN_ADDRESS,
+                BASE_SENDIT_TOKEN_ADDRESS,
+              ])
+
+            console.log({multisigTokens})
+        }
     }, []);
 
     return (
