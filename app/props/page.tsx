@@ -93,7 +93,7 @@ const Proposals = () => {
       where: {
         dao: "0x880fb3cf5c6cc2d7dfc13a993e839a9411200c17",
       },
-      first: 7,
+      first: 50,
     },
   });
 
