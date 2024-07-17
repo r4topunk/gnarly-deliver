@@ -92,8 +92,8 @@ function UpdateBody({
       key={update.id}
       w={"full"}
       p={4}
-      onMouseEnter={() => setDisplayEditButtons(true)}
-      onMouseLeave={() => setDisplayEditButtons(false)}
+      onMouseEnter={() => userAddress === update.author && (setDisplayEditButtons(true))}
+      onMouseLeave={() => userAddress === update.author && (setDisplayEditButtons(false))}
     >
       <VStack align={"left"} gap={0} w={"full"}>
         <HStack w={"full"} justify={"space-between"}>
