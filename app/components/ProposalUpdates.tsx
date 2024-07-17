@@ -36,22 +36,63 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
     e.preventDefault();
 
     try {
-      const { data, error } = await supabase.from("updates").insert([
-        {
-          author: userWallet,
-          comment_body: newComment,
-          likes: 0,
-          proposal_id: Number(proposal.proposalNumber),
-        },
-      ]);
-      setUpdates(updates);
+      // Test if proposal exists in the database
+      const { data: proposalExists, error: proposalError } = await supabase
+        .from('proposals')
+        .select()
+        .eq('proposal_id', proposal.proposalNumber)
+        .single(); // Use single() to get a single row
+
+      if (proposalError) {
+        console.error('Error checking proposal existence:', proposalError);
+        return;
+      }
+
+      if (!proposalExists) {
+        // If it doesn't exist, create a new entry
+        const { data, error } = await supabase
+          .from('proposals')
+          .insert([
+            {
+              id: Number(proposal.proposalNumber),
+              created_at: new Date().toISOString(), // Use ISO string for created_at
+              ai_summary: '',
+              proposal_index: proposal.proposalId,
+            },
+          ]);
+
+        if (error) {
+          console.error('Error inserting new proposal:', error);
+          return;
+        }
+      }
+
+      // Insert the new update
+      const { data: updateData, error: updateError } = await supabase
+        .from('updates')
+        .insert([
+          {
+            author: userWallet,
+            comment_body: newComment,
+            likes: 0,
+            proposal_id: Number(proposal.proposalNumber),
+          },
+        ]);
+
+      if (updateError) {
+        console.error('Error inserting new update:', updateError);
+        return;
+      }
+
+      // Fetch updates and clear the comment input field
       fetchUpdates();
-      if (error) throw error;
-      setNewComment("");
+      setNewComment('');
     } catch (err) {
-      console.error(err);
+      console.error('Unexpected error:', err);
     }
   };
+
+
   return (
     <Box w={"full"} id="teste">
       {userWallet && (
