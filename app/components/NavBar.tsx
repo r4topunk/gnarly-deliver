@@ -23,9 +23,9 @@ export default function NavBar() {
             const multisigTokens = await getTokensValues(BASE_MULTISIG_ADDRESS, [
                 BASE_USDC_TOKEN_ADDRESS,
                 BASE_SENDIT_TOKEN_ADDRESS,
-              ])
+            ])
 
-            console.log({multisigTokens})
+            // console.log({ multisigTokens })
         }
     }, []);
 

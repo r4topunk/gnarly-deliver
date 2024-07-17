@@ -35,28 +35,31 @@ export const useAllUpdates = () => {
   };
 };
 
-export const useUpdates = (proposalId: string) => {
+export const useUpdates = (proposalId: number) => {
   const [updates, setUpdates] = useState<Update[]>([]);
   const supabase = createClient();
 
-  useEffect(() => {
-    async function fetchUpdates() {
-      try {
-        const { data: updates } = await supabase
-          .from("updates")
-          .select()
-          .eq("proposal_id", proposalId);
-        setUpdates(updates as Update[]);
-      } catch (err) {
-        console.error(err);
-      }
+  async function fetchUpdates() {
+    console.log(proposalId);
+    try {
+      const { data: updates } = await supabase
+        .from("updates")
+        .select()
+        .eq("proposal_id", proposalId);
+      setUpdates(updates as Update[]);
+      console.log(updates);
+    } catch (err) {
+      console.error(err);
     }
+  }
+  useEffect(() => {
     fetchUpdates();
   }, []);
 
   return {
     updates,
     setUpdates,
+    fetchUpdates,
   };
 };
 

@@ -93,7 +93,7 @@ const Proposals = () => {
       where: {
         dao: "0x880fb3cf5c6cc2d7dfc13a993e839a9411200c17",
       },
-      first: 100,
+      first: 7,
     },
   });
 
@@ -109,6 +109,7 @@ const Proposals = () => {
         forVotes: proposal.forVotes,
         againstVotes: proposal.againstVotes,
         abstainVotes: proposal.abstainVotes,
+        proposalNumber: proposal.proposalNumber,
         quorumVotes: proposal.quorumVotes,
         expiresAt: proposal.expiresAt,
         snapshotBlockNumber: proposal.snapshotBlockNumber,

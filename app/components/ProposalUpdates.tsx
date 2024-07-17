@@ -3,17 +3,18 @@
 import { Box, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import useUpdates from "../hooks/useUpdates";
+import useUpdates, { Update } from "../hooks/useUpdates";
 import { Proposal } from "../types";
 import { createClient } from "../utils/supabase/client";
 import UpdateBody from "./UpdateBody";
+import { set, update } from "lodash";
 
 interface ProposalUpdatesProps {
   proposal: Proposal;
 }
 
 function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
-  const { updates, setUpdates } = useUpdates(proposal.proposalId);
+  const { updates, setUpdates, fetchUpdates } = useUpdates(proposal.proposalNumber);
   const supabase = createClient();
   const [author, setAuthor] = useState<string>("");
   const [comment_body, setComment_body] = useState<string>("");
@@ -24,30 +25,33 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
   const user_account = useAccount();
   const [userWallet, setUserWallet] = useState<string>("");
 
-
+  useEffect(() => {
+    if (user_account) {
+      setUserWallet(user_account.address as string);
+    }
+  }, [user_account]);
 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const id_index = Math.floor(Math.random() * 1000000);
+
     try {
       const { data, error } = await supabase.from("updates").insert([
         {
-          id: id_index,
           author: userWallet,
           comment_body: newComment,
-          created_at: new Date().toISOString(),
           likes: 0,
-          proposal_id: proposal.proposalId,
+          proposal_id: Number(proposal.proposalNumber),
         },
       ]);
+      setUpdates(updates);
+      fetchUpdates();
       if (error) throw error;
       setNewComment("");
     } catch (err) {
       console.error(err);
     }
   };
-
   return (
     <Box w={"full"} id="teste">
       {userWallet && (
@@ -74,7 +78,9 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
 
       <VStack mt={4}>
         {updates && updates.length > 0
-          ? updates.map((update) => <UpdateBody key={update.id} update={update} author={proposal.proposer} />)
+          ? updates
+            .sort((a: Update, b: Update) => b.created_at.localeCompare(a.created_at))
+            .map((update: Update) => <UpdateBody fetchUpdates={fetchUpdates} key={update.id} update={update} author={proposal.proposer} />)
           : ""}
       </VStack>
     </Box>

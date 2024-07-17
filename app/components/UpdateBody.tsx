@@ -6,9 +6,11 @@ import {
   AccordionItem,
   Avatar,
   Box,
+  Button,
   Card,
   HStack,
   Text,
+  Textarea,
   VStack,
 } from "@chakra-ui/react";
 import { formatDistanceToNow } from "date-fns";
@@ -20,17 +22,24 @@ import remarkGfm from "remark-gfm";
 import useEnsDetails from "../hooks/useEnsDetails";
 import { Update } from "../hooks/useUpdates";
 import { MarkdownRenderers } from "./MarkdownRenderers";
+import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
+import { useAccount } from "wagmi";
+import { createClient } from "../utils/supabase/client";
+import { set } from "lodash";
 
 const formatRelativeDate = (dateString: string) => {
   const date = new Date(dateString);
   return formatDistanceToNow(date, { addSuffix: true });
 };
+const supabase = createClient();
 
 function UpdateBody({
+  fetchUpdates,
   update,
   author,
   open = false,
 }: {
+  fetchUpdates: () => void;
   update: Update;
   author: string;
   open?: boolean;
@@ -39,6 +48,41 @@ function UpdateBody({
     update.author as `0x${string}`,
   );
   const [isExpanded, setIsExpanded] = useState(open);
+  const userWallet = useAccount();
+  const userAddress = userWallet?.address as string;
+  const [isEditing, setIsEditing] = useState(false);
+  const [newComment, setNewComment] = useState(update.comment_body);
+
+  const handleDeletion = async () => {
+    console.log(update.id);
+    const { data, error } = await supabase
+      .from("updates")
+      .delete()
+      .eq("id", update.id);
+    fetchUpdates();
+    if (error) {
+      console.error(error);
+    }
+  }
+
+  const handleEditContent = async () => {
+    console.log(update.id);
+    const { data, error } = await supabase
+      .from("updates")
+      .update({ comment_body: newComment })
+      .eq("id", update.id);
+    fetchUpdates();
+    setIsEditing(false);
+    if (error) {
+      console.error(error);
+    }
+  }
+
+  const handlePencilClick = () => {
+    setIsExpanded(true);
+    setIsEditing(isEditing => !isEditing);
+  }
+  const [displayEditButtons, setDisplayEditButtons] = useState(false);
 
   return (
     <Card
@@ -48,6 +92,8 @@ function UpdateBody({
       key={update.id}
       w={"full"}
       p={4}
+      onMouseEnter={() => setDisplayEditButtons(true)}
+      onMouseLeave={() => setDisplayEditButtons(false)}
     >
       <VStack align={"left"} gap={0} w={"full"}>
         <HStack w={"full"} justify={"space-between"}>
@@ -57,6 +103,12 @@ function UpdateBody({
               size="sm"
             />
             <Text fontSize={18}>{ensName}</Text>
+            {userAddress === update.author && (
+              <HStack display={displayEditButtons ? 'flex' : 'none'}>
+                <FaPencilAlt onClick={handlePencilClick} color="gray.500" />
+                <FaTrashAlt onClick={handleDeletion} color="red" />
+              </HStack>
+            )}
           </HStack>
           <Link href={`/update/${update.id}`}>
             {formatRelativeDate(update.created_at)}
@@ -75,13 +127,30 @@ function UpdateBody({
             },
           }}
         >
-          <ReactMarkdown
-            rehypePlugins={[rehypeRaw]}
-            remarkPlugins={[remarkGfm]}
-            components={MarkdownRenderers}
-          >
-            {update.comment_body}
-          </ReactMarkdown>
+          {isEditing ? (
+            <Box>
+              <Textarea
+                className="w-full h-24 p-2 rounded-md border border-gray-200"
+                placeholder="Add your comment"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+              />
+              <Button
+                className="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                onClick={() => handleEditContent()}
+              >
+                Submit
+              </Button>
+            </Box>
+          ) : (
+            <ReactMarkdown
+              rehypePlugins={[rehypeRaw]}
+              remarkPlugins={[remarkGfm]}
+              components={MarkdownRenderers}
+            >
+              {update.comment_body}
+            </ReactMarkdown>
+          )}
           {!isExpanded && (
             <Box
               position="absolute"

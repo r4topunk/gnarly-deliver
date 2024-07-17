@@ -51,6 +51,7 @@ export const useGraphqlQuery = ({
             }
 
             setData(result?.data);
+            console.log(result?.data);
         } catch (e) {
             setError((e as Error).message);
         } finally {

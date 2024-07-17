@@ -7,6 +7,7 @@ export type Proposal = {
     description: string;
     forVotes: number;
     againstVotes: number;
+    proposalNumber: number;
     abstainVotes: number;
     quorumVotes: number;
     expiresAt: number;

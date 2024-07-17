@@ -54,54 +54,54 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
 
   const [aiSummary, setAiSummary] = useState<string>("");
 
-  const getAiSummary = async (proposalId: string, proposalDescription: string): Promise<any> => {
-    try {
-      const { data, error } = await supabase
-        .from("updates")
-        .select("AiSummary")
-        .eq("proposal_id", proposalId)
-        .single();
+  // const getAiSummary = async (proposalId: string, proposalDescription: string): Promise<any> => {
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from("updates")
+  //       .select("AiSummary")
+  //       .eq("proposal_id", proposalId)
+  //       .single();
 
-      if (error && error.code === "PGRST116") {
-        // No rows found
-        const aiSummary = await getSummary(proposalDescription);
-        console.log("Generated AI summary:", aiSummary);
+  //     if (error && error.code === "PGRST116") {
+  //       // No rows found
+  //       const aiSummary = await getSummary(proposalDescription);
+  //       console.log("Generated AI summary:", aiSummary);
 
-        const { data: updateData, error: updateError } = await supabase
-          .from("updates")
-          .update({ AiSummary: aiSummary })
-          .eq("proposal_id", proposalId);
+  //       const { data: updateData, error: updateError } = await supabase
+  //         .from("updates")
+  //         .update({ AiSummary: aiSummary })
+  //         .eq("proposal_id", proposalId);
 
-        if (updateError) throw updateError;
+  //       if (updateError) throw updateError;
 
-        console.log("Database updated with new AI summary:", updateData);
-        return aiSummary;
-      }
+  //       console.log("Database updated with new AI summary:", updateData);
+  //       return aiSummary;
+  //     }
 
-      if (error) throw error;
+  //     if (error) throw error;
 
-      if (data && data.AiSummary) {
-        console.log("Database summary found:", data);
-        return data.AiSummary;
-      }
-    } catch (err) {
-      console.error("Error in getAiSummary:", err);
-      throw err;
-    }
-  };
+  //     if (data && data.AiSummary) {
+  //       console.log("Database summary found:", data);
+  //       return data.AiSummary;
+  //     }
+  //   } catch (err) {
+  //     console.error("Error in getAiSummary:", err);
+  //     throw err;
+  //   }
+  // };
 
-  useEffect(() => {
-    const fetchAiSummary = async () => {
-      try {
-        const summary = await getAiSummary(proposal.proposalId, proposal.description);
-        setAiSummary(summary);
-      } catch (error) {
-        console.error("Error fetching AI summary:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchAiSummary = async () => {
+  //     try {
+  //       const summary = await getAiSummary(proposal.proposalId, proposal.description);
+  //       setAiSummary(summary);
+  //     } catch (error) {
+  //       console.error("Error fetching AI summary:", error);
+  //     }
+  //   };
 
-    fetchAiSummary();
-  }, [proposal.proposalId, proposal.description]);
+  //   fetchAiSummary();
+  // }, [proposal.proposalId, proposal.description]);
 
   return (
     <Card direction={{ base: "column", sm: "row" }} overflow="hidden" variant="outline" mb={4}>
@@ -130,9 +130,9 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
               </HStack>
             </Box>
             <Box display={"flex"} flexDirection={"column"} justifyContent={"space-between"} alignItems={"flex-end"}>
-              <Text fontSize="sm" color="gray.500">
+              {/* <Text fontSize="sm" color="gray.500">
                 {aiSummary}
-              </Text>
+              </Text> */}
             </Box>
           </VStack>
         </CardBody>
