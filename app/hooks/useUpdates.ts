@@ -7,31 +7,32 @@ export interface Update {
   comment_body: string;
   created_at: string; // updated column name
   likes: number;
-  proposal_id: string; // updated type
+  proposal_id: string;
 }
 
 export const useAllUpdates = () => {
   const [updates, setUpdates] = useState<Update[]>([]);
   const supabase = createClient();
 
-  useEffect(() => {
-    async function fetchUpdates() {
-      try {
-        const { data: updates } = await supabase
-          .from("updates")
-          .select()
-          .order("created_at", { ascending: false });
-        setUpdates(updates as Update[]);
-      } catch (err) {
-        console.error(err);
-      }
+  async function fetchAllUpdates() {
+    try {
+      const { data: updates } = await supabase
+        .from("updates")
+        .select()
+        .order("created_at", { ascending: false });
+      setUpdates(updates as Update[]);
+    } catch (err) {
+      console.error(err);
     }
-    fetchUpdates();
+  }
+  useEffect(() => {
+    fetchAllUpdates();
   }, []);
 
   return {
     updates,
     setUpdates,
+    fetchAllUpdates,
   };
 };
 

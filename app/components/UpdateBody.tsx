@@ -39,7 +39,7 @@ function UpdateBody({
   author,
   open = false,
 }: {
-  fetchUpdates: () => void;
+  fetchUpdates?: () => void;
   update: Update;
   author: string;
   open?: boolean;
@@ -59,7 +59,7 @@ function UpdateBody({
       .from("updates")
       .delete()
       .eq("id", update.id);
-    fetchUpdates();
+    fetchUpdates && fetchUpdates();
     if (error) {
       console.error(error);
     }
@@ -71,7 +71,7 @@ function UpdateBody({
       .from("updates")
       .update({ comment_body: newComment })
       .eq("id", update.id);
-    fetchUpdates();
+    fetchUpdates && fetchUpdates();
     setIsEditing(false);
     if (error) {
       console.error(error);

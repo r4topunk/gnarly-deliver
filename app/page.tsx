@@ -4,9 +4,9 @@ import { Container, Text, VStack } from "@chakra-ui/react";
 import UpdateBody from "./components/UpdateBody";
 import { useAllUpdates } from "./hooks/useUpdates";
 
-const Home = () => {
-  const { updates, setUpdates } = useAllUpdates();
 
+const Home = () => {
+  const { updates, setUpdates, fetchAllUpdates } = useAllUpdates();
   return (
     <Container maxW="3xl" marginBlock={4}>
       <Text fontSize="4xl" width="full" textAlign={"center"} fontWeight="bold">
@@ -14,7 +14,7 @@ const Home = () => {
       </Text>
       <VStack mt={4}>
         {updates && updates.length > 0
-          ? updates.map((update) => <UpdateBody key={update.id} update={update} author={update.author} />)
+          ? updates.map((update) => <UpdateBody fetchUpdates={fetchAllUpdates} key={update.id} update={update} author={update.author} />)
           : ""}
       </VStack>
     </Container>
