@@ -1,13 +1,12 @@
 "use client";
 
-import { Box, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import useUpdates, { Update } from "../hooks/useUpdates";
 import { Proposal } from "../types";
 import { createClient } from "../utils/supabase/client";
 import UpdateBody from "./UpdateBody";
-import { set, update } from "lodash";
 
 interface ProposalUpdatesProps {
   proposal: Proposal;
@@ -98,7 +97,7 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
       {userWallet && (
         <h4 className=" font-semibold mb-2"> Connected User: {userWallet}</h4>
       )}
-      {proposal.proposer === userWallet.toLowerCase() ? (
+      {userWallet && proposal.proposer === userWallet.toLowerCase() ? (
         <>
           <textarea
             className="w-full h-24 p-2 rounded-md border border-gray-200"
@@ -106,12 +105,9 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
           />
-          <button
-            className="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-            onClick={handleSubmit}
-          >
+          <Button variant="solid" colorScheme="yellow" onClick={handleSubmit}>
             Submit
-          </button>
+          </Button>
         </>
       ) : (
         <Text>Only the proposer can comment</Text>
