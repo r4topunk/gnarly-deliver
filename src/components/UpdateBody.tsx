@@ -52,7 +52,7 @@ function UpdateBody({
   const [isEditing, setIsEditing] = useState(false);
   const [newComment, setNewComment] = useState(update.comment_body);
 
-  const isUserAuthor = userAddress !== update.author;
+  const isUserAuthor = userAddress === update.author;
 
   const handleDeletion = async () => {
     console.log(update.id);
