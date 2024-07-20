@@ -34,16 +34,15 @@ const formatRelativeDate = (dateString: string) => {
 const supabase = createClient();
 
 function UpdateBody({
-  fetchUpdates,
-  update,
-  author,
+  serverUpdate,
   open = false,
 }: {
-  fetchUpdates?: () => void;
-  update: Update;
-  author: string;
+  serverUpdate: Update;
   open?: boolean;
 }) {
+  const [update, setUpdate] = useState(serverUpdate);
+  const [display, setDisplay] = useState("block");
+
   const { ensName, ensAvatar, isLoading } = useEnsDetails(
     update.author as `0x${string}`,
   );
@@ -53,17 +52,19 @@ function UpdateBody({
   const [isEditing, setIsEditing] = useState(false);
   const [newComment, setNewComment] = useState(update.comment_body);
 
+  const isUserAuthor = userAddress !== update.author;
+
   const handleDeletion = async () => {
     console.log(update.id);
     const { data, error } = await supabase
       .from("updates")
       .delete()
       .eq("id", update.id);
-    fetchUpdates && fetchUpdates();
+    setDisplay("none");
     if (error) {
       console.error(error);
     }
-  }
+  };
 
   const handleEditContent = async () => {
     console.log(update.id);
@@ -71,17 +72,17 @@ function UpdateBody({
       .from("updates")
       .update({ comment_body: newComment })
       .eq("id", update.id);
-    fetchUpdates && fetchUpdates();
+    setUpdate(update => ({...update, comment_body: newComment}))
     setIsEditing(false);
     if (error) {
       console.error(error);
     }
-  }
+  };
 
   const handlePencilClick = () => {
     setIsExpanded(true);
-    setIsEditing(isEditing => !isEditing);
-  }
+    setIsEditing((isEditing) => !isEditing);
+  };
   const [displayEditButtons, setDisplayEditButtons] = useState(false);
 
   return (
@@ -92,10 +93,11 @@ function UpdateBody({
       key={update.id}
       w={"full"}
       p={4}
-      onMouseEnter={() => userAddress === update.author && (setDisplayEditButtons(true))}
-      onMouseLeave={() => userAddress === update.author && (setDisplayEditButtons(false))}
+      onMouseEnter={() => setDisplayEditButtons(true)}
+      onMouseLeave={() => setDisplayEditButtons(false)}
+      display={display}
     >
-      <VStack align={"left"} gap={0} w={"full"}>
+      <VStack align={"left"} gap={2} w={"full"}>
         <HStack w={"full"} justify={"space-between"}>
           <HStack>
             <Avatar
@@ -103,8 +105,8 @@ function UpdateBody({
               size="sm"
             />
             <Text fontSize={18}>{ensName}</Text>
-            {userAddress === update.author && (
-              <HStack display={displayEditButtons ? 'flex' : 'none'}>
+            {isUserAuthor && displayEditButtons && (
+              <HStack>
                 <FaPencilAlt onClick={handlePencilClick} color="gray.500" />
                 <FaTrashAlt onClick={handleDeletion} color="red" />
               </HStack>
@@ -128,7 +130,7 @@ function UpdateBody({
           }}
         >
           {isEditing ? (
-            <Box>
+            <VStack align={"start"} gap={2}>
               <Textarea
                 className="w-full h-24 p-2 rounded-md border border-gray-200"
                 placeholder="Add your comment"
@@ -141,7 +143,7 @@ function UpdateBody({
               >
                 Submit
               </Button>
-            </Box>
+            </VStack>
           ) : (
             <ReactMarkdown
               rehypePlugins={[rehypeRaw]}

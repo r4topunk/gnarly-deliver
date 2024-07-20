@@ -114,7 +114,7 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
         {updates && updates.length > 0
           ? updates
             .sort((a: Update, b: Update) => b.created_at.localeCompare(a.created_at))
-            .map((update: Update) => <UpdateBody fetchUpdates={fetchUpdates} key={update.id} update={update} author={proposal.proposer} />)
+            .map((update: Update) => <UpdateBody key={update.id} serverUpdate={update} />)
           : ""}
       </VStack>
     </Box>

@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         <UpdateBody
           open
           key={update.id}
-          update={update}
+          serverUpdate={update}
           author={update.author}
         />
       ) : (
