@@ -118,7 +118,7 @@ function UpdateBody({
         </HStack>
         <Box
           h={isExpanded ? "100%" : "80px"}
-          overflow="auto"
+          overflow={isExpanded ? "auto" : "hidden"}
           position="relative"
           sx={{
             "&::-webkit-scrollbar": {
@@ -152,17 +152,6 @@ function UpdateBody({
             >
               {update.comment_body}
             </ReactMarkdown>
-          )}
-          {!isExpanded && (
-            <Box
-              position="absolute"
-              bottom={0}
-              left={0}
-              right={0}
-              height="50px"
-              bg="linear-gradient(transparent, white)"
-              pointerEvents="none"
-            />
           )}
         </Box>
         {open === false && update.comment_body.length > 30 && (
