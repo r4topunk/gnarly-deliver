@@ -1,54 +1,37 @@
+import { fetchAllUpdates, fetchUpdatesForProposal } from "@/lib/supabase";
+import { Update } from "@/types";
 import { useEffect, useState } from "react";
-import { createClient } from "../utils/supabase/client";
-
-export interface Update {
-  id: number;
-  author: string;
-  comment_body: string;
-  created_at: string; // updated column name
-  likes: number;
-  proposal_id: string;
-}
 
 export const useAllUpdates = () => {
   const [updates, setUpdates] = useState<Update[]>([]);
-  const supabase = createClient();
 
-  async function fetchAllUpdates() {
+  async function fetchUpdates() {
     try {
-      const { data: updates } = await supabase
-        .from("updates")
-        .select()
-        .order("created_at", { ascending: false });
-      setUpdates(updates as Update[]);
+      const updates = await fetchAllUpdates();
+      setUpdates(updates);
     } catch (err) {
       console.error(err);
     }
   }
+
   useEffect(() => {
-    fetchAllUpdates();
+    fetchUpdates();
   }, []);
 
   return {
     updates,
     setUpdates,
-    fetchAllUpdates,
+    fetchUpdates,
   };
 };
 
-export const useUpdates = (proposalId: number) => {
+export const useProposalUpdates = (proposalId: number) => {
   const [updates, setUpdates] = useState<Update[]>([]);
-  const supabase = createClient();
 
   async function fetchUpdates() {
-    console.log(proposalId);
     try {
-      const { data: updates } = await supabase
-        .from("updates")
-        .select()
-        .eq("proposal_id", proposalId);
-      setUpdates(updates as Update[]);
-      console.log(updates);
+      const updates = await fetchUpdatesForProposal(proposalId)
+      setUpdates(updates);
     } catch (err) {
       console.error(err);
     }
@@ -63,5 +46,3 @@ export const useUpdates = (proposalId: number) => {
     fetchUpdates,
   };
 };
-
-export default useUpdates;

@@ -1,18 +1,22 @@
-import UpdateBody from "@/app/components/UpdateBody";
-import { createClient } from "@/app/utils/supabase/server";
-import { Container } from "@chakra-ui/react";
+import UpdateBody from "@/components/UpdateBody";
+import { fetchUpdateById } from "@/lib/supabase";
+import { Container, Text } from "@chakra-ui/react";
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const supabase = createClient();
-  const { data: update } = await supabase
-    .from("updates")
-    .select()
-    .eq("id", params.slug)
-    .single();
+  const update = await fetchUpdateById(params.slug);
 
   return (
     <Container maxW={"3xl"}>
-      <UpdateBody open key={update.id} update={update} author={update.author} />
+      {update ? (
+        <UpdateBody
+          open
+          key={update.id}
+          update={update}
+          author={update.author}
+        />
+      ) : (
+      <Text>404 - Update not found</Text>
+    )}
     </Container>
   );
 }

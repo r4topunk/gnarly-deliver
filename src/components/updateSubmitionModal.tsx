@@ -1,9 +1,8 @@
 // lets create a chakra modal so the user can also share his post on socials 
 
-import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Textarea, VStack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { Proposal } from "../types";
-import { Update } from "../hooks/useUpdates";
+import { Proposal, Update } from "@/types";
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Textarea, VStack } from "@chakra-ui/react";
+import { useState } from "react";
 
 
 interface UpdateSubmitionModalProps {

@@ -1,4 +1,6 @@
 "use client";
+
+import { Update } from "@/types";
 import {
   Accordion,
   AccordionButton,
@@ -16,16 +18,14 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { useState } from "react";
+import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import useEnsDetails from "../hooks/useEnsDetails";
-import { Update } from "../hooks/useUpdates";
-import { MarkdownRenderers } from "./MarkdownRenderers";
-import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import { useAccount } from "wagmi";
+import useEnsDetails from "../hooks/useEnsDetails";
 import { createClient } from "../utils/supabase/client";
-import { set } from "lodash";
+import { MarkdownRenderers } from "./MarkdownRenderers";
 
 const formatRelativeDate = (dateString: string) => {
   const date = new Date(dateString);
