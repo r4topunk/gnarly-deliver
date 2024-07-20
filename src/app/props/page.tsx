@@ -1,4 +1,10 @@
 "use client";
+
+import ProposalDetailView from "@/components/ProposalDetailView";
+import ProposalList from "@/components/ProposalList";
+import ProposalUpdates from "@/components/ProposalUpdates";
+import useGraphqlQuery from "@/hooks/useGraphqlQuery";
+import { Proposal } from "@/types";
 import {
   Box,
   Button,
@@ -10,11 +16,6 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import ProposalDetailView from "../components/ProposalDetailView";
-import ProposalList from "../components/ProposalList";
-import ProposalUpdates from "../components/ProposalUpdates";
-import useGraphqlQuery from "../hooks/useGraphqlQuery";
-import { Proposal } from "../types"; // Import the shared Proposal type
 
 export const NOUNSBUILD_PROPOSALS_QUERY = `
 query proposals(

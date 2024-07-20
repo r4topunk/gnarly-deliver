@@ -1,8 +1,8 @@
 "use client"
 
+import UpdateBody from "@/components/UpdateBody";
+import { useAllUpdates } from "@/hooks/useUpdates";
 import { Container, Text, VStack } from "@chakra-ui/react";
-import UpdateBody from "./components/UpdateBody";
-import { useAllUpdates } from "./hooks/useUpdates";
 
 
 const Home = () => {

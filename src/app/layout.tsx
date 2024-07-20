@@ -1,10 +1,10 @@
+import NavBar from "@/components/NavBar";
+import { Providers } from "@/components/wagmiProvider";
+import { ChakraProvider } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { Londrina_Solid } from "next/font/google";
-import "./globals.css";
-import { ChakraProvider } from "@chakra-ui/react";
 import * as React from "react";
-import { Providers } from "./wagmiProvider";
-import NavBar from "./components/NavBar";
+import "./globals.css";
 
 const londrina = Londrina_Solid({ weight: "300", subsets: ["latin"] });
 
