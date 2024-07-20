@@ -3,27 +3,10 @@ import { Box, Flex, Image, Link, useMediaQuery } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
-import {
-    BASE_MULTISIG_ADDRESS,
-    BASE_SENDIT_TOKEN_ADDRESS,
-    BASE_USDC_TOKEN_ADDRESS,
-} from "../constants/contratos";
-import { getTokensValues } from "../utils/web3";
 
 export default function NavBar() {
   const [isMobile] = useMediaQuery("(min-width: 768px)");
   const pathname = usePathname();
-
-  useEffect(() => {
-    initTeste();
-    async function initTeste() {
-      const multisigTokens = await getTokensValues(BASE_MULTISIG_ADDRESS, [
-        BASE_USDC_TOKEN_ADDRESS,
-        BASE_SENDIT_TOKEN_ADDRESS,
-      ]);
-    }
-  }, []);
 
   return (
     <Box bg="gray.800" px={4}>
