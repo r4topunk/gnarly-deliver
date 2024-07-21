@@ -12,11 +12,12 @@ export default async function Page({ params }: { params: { slug: string } }) {
           open
           key={update.id}
           serverUpdate={update}
-          author={update.author}
+
+
         />
       ) : (
-      <Text>404 - Update not found</Text>
-    )}
+        <Text>404 - Update not found</Text>
+      )}
     </Container>
   );
 }
