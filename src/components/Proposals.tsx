@@ -4,7 +4,7 @@ import ProposalDetailView from "@/components/ProposalDetailView";
 import ProposalList from "@/components/ProposalList";
 import ProposalUpdates from "@/components/ProposalUpdates";
 import useGraphqlQuery from "@/hooks/useGraphqlQuery";
-import { Proposal } from "@/types";
+import { SubGraphProposal } from "@/types";
 import { NOUNSBUILD_PROPOSALS_QUERY } from "@/utils/query";
 import {
   Box,
@@ -22,8 +22,8 @@ const Proposals = () => {
   const subgGraphUrl =
     "https://api.goldsky.com/api/public/project_clkk1ucdyf6ak38svcatie9tf/subgraphs/nouns-builder-base-mainnet/stable/gn";
   const [proposalId, setProposalId] = useState<string | null>(null);
-  const [proposals, setProposals] = useState<Proposal[]>([]);
-  const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(
+  const [proposals, setProposals] = useState<SubGraphProposal[]>([]);
+  const [selectedProposal, setSelectedProposal] = useState<SubGraphProposal | null>(
     null,
   );
   const [proposalLoading, setProposalLoading] = useState<boolean>(false);
@@ -65,7 +65,7 @@ const Proposals = () => {
     }
   }, [proposalsData]);
 
-  const handleProposalClick = (proposal: Proposal) => {
+  const handleProposalClick = (proposal: SubGraphProposal) => {
     setSelectedProposal(proposal);
     setProposalId(proposal.proposalId);
   };
@@ -90,6 +90,7 @@ const Proposals = () => {
               <TabList>
                 <Center>
                   <Tab>Proposal Details</Tab>
+                  <Tab>Votes</Tab>
                   <Tab>Updates</Tab>
                 </Center>
               </TabList>
@@ -99,6 +100,9 @@ const Proposals = () => {
                     proposal={selectedProposal}
                     loading={listLoading}
                   />
+                </TabPanel>
+                <TabPanel>
+                  Votes
                 </TabPanel>
                 <TabPanel>
                   <ProposalUpdates proposal={selectedProposal} />

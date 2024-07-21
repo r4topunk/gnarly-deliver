@@ -13,7 +13,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Proposal } from "../types";
+import { SubGraphProposal } from "../types";
 import ProposalStatus from "./ProposalStatus";
 import { createClient } from "../utils/supabase/client";
 import getSummary from "../lib/getAiSummary";
@@ -21,7 +21,7 @@ import useMemoizedNnsName from "../hooks/useNNS";
 import useEnsDetails from "../hooks/useEnsAvatar";
 
 type ProposalItemProps = {
-  proposal: Proposal;
+  proposal: SubGraphProposal;
   onClick: () => void;
 };
 

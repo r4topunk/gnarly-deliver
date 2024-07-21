@@ -1,4 +1,4 @@
-export type Proposal = {
+export type SubGraphProposal = {
     proposalId: string;
     title: string;
     proposer: string;
@@ -14,11 +14,3 @@ export type Proposal = {
     transactionHash: string;
 };
 
-export interface Update {
-    id: number;
-    author: string;
-    comment_body: string;
-    created_at: string;
-    likes: number;
-    proposal_id: string;
-  }

@@ -1,11 +1,11 @@
 'use client'
 import React from "react";
 import ProposalItem from "./ProposalItem";
-import { Proposal } from "../types";
+import { SubGraphProposal } from "../types";
 
 type ProposalListProps = {
-    proposals: Proposal[];
-    onProposalClick: (proposal: Proposal) => void;
+    proposals: SubGraphProposal[];
+    onProposalClick: (proposal: SubGraphProposal) => void;
 };
 
 const ProposalList: React.FC<ProposalListProps> = ({ proposals, onProposalClick }) => {

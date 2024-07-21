@@ -2,21 +2,22 @@
 
 import UpdateBody from "@/components/UpdateBody";
 import { useProposalUpdates } from "@/hooks/useUpdates";
-import { Proposal, Update } from "@/types";
+import { SubGraphProposal } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 import { Box, Button, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import { Tables } from "@/utils/supabase/database.types";
+
+type Update = Tables<'updates'>;  // Type for updates row
 
 interface ProposalUpdatesProps {
-  proposal: Proposal;
+  proposal: SubGraphProposal;
 }
 
 function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
   const { updates, fetchUpdates } = useProposalUpdates(proposal.proposalNumber);
-
   const supabase = createClient();
-  
   const [newComment, setNewComment] = useState<string>("");
   const user_account = useAccount();
   const [userWallet, setUserWallet] = useState<string>("");
@@ -30,48 +31,31 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    console.log('trying to submit');
     try {
       // Test if proposal exists in the database
-      const { data: proposalExists, error: proposalError } = await supabase
+      const { data: proposalUpsert, error: proposalError } = await supabase
         .from('proposals')
-        .select()
-        .eq('proposal_id', proposal.proposalNumber)
-        .single(); // Use single() to get a single row
-
+        .upsert({
+          proposalNumber: Number(proposal.proposalNumber),
+          ai_summary: '',
+          proposalId: String(proposal.proposalId),
+          proposer: proposal.proposer,
+          title: proposal.title
+        })
+      console.log('proposalExists:', proposalUpsert);
       if (proposalError) {
         console.error('Error checking proposal existence:', proposalError);
         return;
       }
 
-      if (!proposalExists) {
-        // If it doesn't exist, create a new entry
-        const { data, error } = await supabase
-          .from('proposals')
-          .insert([
-            {
-              id: Number(proposal.proposalNumber),
-              created_at: new Date().toISOString(), // Use ISO string for created_at
-              ai_summary: '',
-              proposal_index: proposal.proposalId,
-            },
-          ]);
-
-        if (error) {
-          console.error('Error inserting new proposal:', error);
-          return;
-        }
-      }
-
-      // Insert the new update
       const { data: updateData, error: updateError } = await supabase
         .from('updates')
         .insert([
           {
             author: userWallet,
             comment_body: newComment,
-            likes: 0,
-            proposal_id: Number(proposal.proposalNumber),
+            proposalNumber: Number(proposal.proposalNumber),
           },
         ]);
 
@@ -80,7 +64,8 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
         return;
       }
 
-      // Fetch updates and clear the comment input field
+
+
       fetchUpdates();
       setNewComment('');
     } catch (err) {
@@ -88,7 +73,9 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
     }
   };
 
-
+  // console.log('updates:', updates);
+  // console.log('proposal:', proposal);
+  // console.log('userWallet:', userWallet, 'proposal.proposer:', proposal.proposer);
   return (
     <Box w={"full"} id="teste">
       {userWallet && (

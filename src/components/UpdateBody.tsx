@@ -1,6 +1,5 @@
 "use client";
 
-import { Update } from "@/types";
 import {
   Accordion,
   AccordionButton,
@@ -26,11 +25,15 @@ import { useAccount } from "wagmi";
 import useEnsDetails from "../hooks/useEnsDetails";
 import { createClient } from "../utils/supabase/client";
 import { MarkdownRenderers } from "./MarkdownRenderers";
+import { Tables } from "@/utils/supabase/database.types";
+
+type Update = Tables<'updates'>;  // Type for updates row
 
 const formatRelativeDate = (dateString: string) => {
   const date = new Date(dateString);
   return formatDistanceToNow(date, { addSuffix: true });
 };
+
 const supabase = createClient();
 
 function UpdateBody({
@@ -40,7 +43,7 @@ function UpdateBody({
   serverUpdate: Update;
   open?: boolean;
 }) {
-  const [update, setUpdate] = useState(serverUpdate);
+  const [update, setUpdate] = useState<Update>(serverUpdate);
   const [display, setDisplay] = useState("block");
 
   const { ensName, ensAvatar, isLoading } = useEnsDetails(
@@ -72,7 +75,7 @@ function UpdateBody({
       .from("updates")
       .update({ comment_body: newComment })
       .eq("id", update.id);
-    setUpdate(update => ({...update, comment_body: newComment}))
+    setUpdate((update) => ({ ...update, comment_body: newComment }));
     setIsEditing(false);
     if (error) {
       console.error(error);

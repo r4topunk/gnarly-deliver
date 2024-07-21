@@ -1,12 +1,24 @@
-// lets create a chakra modal so the user can also share his post on socials 
-
-import { Proposal, Update } from "@/types";
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Textarea, VStack } from "@chakra-ui/react";
+import { SubGraphProposal } from "../types";
+import {
+    Button,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Textarea,
+    VStack
+} from "@chakra-ui/react";
 import { useState } from "react";
+import { Tables } from "@/utils/supabase/database.types";
 
+// Define the Update type
+type Update = Tables<'updates'>;
 
 interface UpdateSubmitionModalProps {
-    proposal: Proposal;
+    proposal: SubGraphProposal;
     update: Update;
     isOpen: boolean;
     onClose: () => void;

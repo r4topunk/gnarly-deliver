@@ -1,8 +1,8 @@
 "use server";
-import { Update } from "@/types";
+
 import { createClient } from "../utils/supabase/server";
 
-export async function fetchAllUpdates(): Promise<Update[] | []> {
+export async function fetchAllUpdates() {
   const supabase = createClient();
   const { data: updates } = await supabase
     .from("updates")
@@ -11,7 +11,7 @@ export async function fetchAllUpdates(): Promise<Update[] | []> {
   return updates || [];
 }
 
-export async function fetchUpdateById(_id: string): Promise<Update | null> {
+export async function fetchUpdateById(_id: string) {
   const supabase = createClient();
   const { data: update } = await supabase
     .from("updates")
@@ -22,12 +22,12 @@ export async function fetchUpdateById(_id: string): Promise<Update | null> {
 }
 
 export async function fetchUpdatesForProposal(
-  proposal_id: number,
-): Promise<Update[] | []> {
+  proposalNumber: number,
+) {
   const supabase = createClient();
   const { data: updates } = await supabase
     .from("updates")
     .select()
-    .eq("proposal_id", proposal_id);
+    .eq("proposalNumber", proposalNumber);
   return updates || [];
 }
