@@ -1,73 +1,18 @@
-"use client";
-
-import ProposalDetailView from "@/components/ProposalDetailView";
-import ProposalList from "@/components/ProposalList";
-import ProposalUpdates from "@/components/ProposalUpdates";
-import useGraphqlQuery from "@/hooks/useGraphqlQuery";
-import { SubGraphProposal } from "@/types";
-import { NOUNSBUILD_PROPOSALS_QUERY } from "@/utils/query";
-import {
-  Box,
-  Button,
-  Center,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+'use client'
+import { useState } from 'react';
+import { Box, Button, Center, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import ProposalDetailView from '@/components/ProposalDetailView';
+import ProposalList from '@/components/ProposalList';
+import ProposalUpdates from '@/components/ProposalUpdates';
+import { useProposals } from '@/hooks/useProposals';
+import { SubGraphProposal } from '@/types';
 
 const Proposals = () => {
-  const subgGraphUrl =
-    "https://api.goldsky.com/api/public/project_clkk1ucdyf6ak38svcatie9tf/subgraphs/nouns-builder-base-mainnet/stable/gn";
-  const [proposalId, setProposalId] = useState<string | null>(null);
-  const [proposals, setProposals] = useState<SubGraphProposal[]>([]);
-  const [selectedProposal, setSelectedProposal] = useState<SubGraphProposal | null>(
-    null,
-  );
-  const [proposalLoading, setProposalLoading] = useState<boolean>(false);
-  console.log(selectedProposal);
-  const {
-    data: proposalsData,
-    loading: listLoading,
-    error: listError,
-  } = useGraphqlQuery({
-    url: subgGraphUrl,
-    query: NOUNSBUILD_PROPOSALS_QUERY,
-    variables: {
-      where: {
-        dao: "0x880fb3cf5c6cc2d7dfc13a993e839a9411200c17",
-      },
-      first: 50,
-    },
-  });
-
-  useEffect(() => {
-    if (proposalsData) {
-      const mappedProposals = proposalsData.proposals.map((proposal: any) => ({
-        proposalId: proposal.proposalId,
-        title: proposal.title,
-        proposer: proposal.proposer,
-        status:
-          proposal.executableFrom > Date.now() / 1000 ? "Active" : "Closed",
-        description: proposal.description,
-        forVotes: proposal.forVotes,
-        againstVotes: proposal.againstVotes,
-        abstainVotes: proposal.abstainVotes,
-        proposalNumber: proposal.proposalNumber,
-        quorumVotes: proposal.quorumVotes,
-        expiresAt: proposal.expiresAt,
-        snapshotBlockNumber: proposal.snapshotBlockNumber,
-        transactionHash: proposal.transactionHash,
-      }));
-      setProposals(mappedProposals);
-    }
-  }, [proposalsData]);
+  const { proposals, loading, error } = useProposals();
+  const [selectedProposal, setSelectedProposal] = useState<SubGraphProposal | null>(null);
 
   const handleProposalClick = (proposal: SubGraphProposal) => {
     setSelectedProposal(proposal);
-    setProposalId(proposal.proposalId);
   };
 
   return (
@@ -98,7 +43,7 @@ const Proposals = () => {
                 <TabPanel>
                   <ProposalDetailView
                     proposal={selectedProposal}
-                    loading={listLoading}
+                    loading={loading}
                   />
                 </TabPanel>
                 <TabPanel>

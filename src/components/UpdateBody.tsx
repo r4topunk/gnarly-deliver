@@ -12,12 +12,13 @@ import {
   HStack,
   Text,
   Textarea,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { useState } from "react";
-import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
+import { FaPencilAlt, FaShare, FaShareAlt, FaTrashAlt } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
@@ -56,6 +57,22 @@ function UpdateBody({
   const [newComment, setNewComment] = useState(update.comment_body);
 
   const isUserAuthor = userAddress === update.author;
+
+
+  const proposalNumber = update.proposalNumber;
+
+
+  const proposal = async () => {
+    const { data, error } = await supabase
+      .from("proposals")
+      .select("*")
+      .eq("proposalNumber", proposalNumber as number);
+    if (error) {
+      console.error(error);
+    }
+    return data;
+  }
+  const proposalTitle = proposal().then((data) => data && data[0]?.title);
 
   const handleDeletion = async () => {
     console.log(update.id);
@@ -108,16 +125,27 @@ function UpdateBody({
               size="sm"
             />
             <Text fontSize={18}>{ensName}</Text>
+            <Link href={`/update/${update.id}`}>
+            </Link>
+
+            <FaShareAlt cursor={'pointer'} color="gray.500" />
             {isUserAuthor && displayEditButtons && (
-              <HStack>
+              <HStack cursor={'pointer'}>
                 <FaPencilAlt onClick={handlePencilClick} color="gray.500" />
                 <FaTrashAlt onClick={handleDeletion} color="red" />
               </HStack>
             )}
           </HStack>
-          <Link href={`/update/${update.id}`}>
-            {formatRelativeDate(update.created_at)}
-          </Link>
+          <VStack>
+            <Link href={`/proposal/${proposalNumber}`}>
+              <Tooltip label={proposalTitle} aria-label="View update">
+                <Text color="gray.500"> About proposal {proposalNumber}</Text>
+              </Tooltip>
+            </Link>
+            <Text>
+              {formatRelativeDate(update.created_at)}
+            </Text>
+          </VStack>
         </HStack>
         <Box
           h={isExpanded ? "100%" : "80px"}

@@ -53,3 +53,25 @@ fragment ProposalVote on ProposalVote {
   reason
 }
 `;
+
+
+export const NOUNSBUILD_PROPOSAL_QUERY = `
+  query Proposal($where: ProposalWhereInput) {
+    proposals(where: $where) {
+      proposalId
+      title
+      proposer
+      status
+      description
+      forVotes
+      againstVotes
+      abstainVotes
+      proposalNumber
+      quorumVotes
+      expiresAt
+      snapshotBlockNumber
+      transactionHash
+    }
+  }
+`;
+
