@@ -1,4 +1,3 @@
-// types.ts
 export type Proposal = {
     proposalId: string;
     title: string;
@@ -14,3 +13,12 @@ export type Proposal = {
     snapshotBlockNumber: number;
     transactionHash: string;
 };
+
+export interface Update {
+    id: number;
+    author: string;
+    comment_body: string;
+    created_at: string;
+    likes: number;
+    proposal_id: string;
+  }

@@ -1,5 +1,5 @@
+import Proposals from "@/components/Proposals";
 import { Container, Text } from "@chakra-ui/react";
-import Proposals from "../props/page";
 
 const ProposalsPage = () => {
   return (

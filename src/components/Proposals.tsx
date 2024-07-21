@@ -1,4 +1,11 @@
 "use client";
+
+import ProposalDetailView from "@/components/ProposalDetailView";
+import ProposalList from "@/components/ProposalList";
+import ProposalUpdates from "@/components/ProposalUpdates";
+import useGraphqlQuery from "@/hooks/useGraphqlQuery";
+import { Proposal } from "@/types";
+import { NOUNSBUILD_PROPOSALS_QUERY } from "@/utils/query";
 import {
   Box,
   Button,
@@ -10,67 +17,6 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import ProposalDetailView from "../components/ProposalDetailView";
-import ProposalList from "../components/ProposalList";
-import ProposalUpdates from "../components/ProposalUpdates";
-import useGraphqlQuery from "../hooks/useGraphqlQuery";
-import { Proposal } from "../types"; // Import the shared Proposal type
-
-export const NOUNSBUILD_PROPOSALS_QUERY = `
-query proposals(
-  $where: Proposal_filter
-  $first: Int! = 100,
-  $skip: Int = 0
-) {
-  proposals(
-    where: $where
-    first: $first
-    skip: $skip
-    orderBy: timeCreated
-    orderDirection: desc
-  ) {
-    ...Proposal
-    votes {
-      ...ProposalVote
-    }
-  }
-}
-
-fragment Proposal on Proposal {
-  abstainVotes
-  againstVotes
-  calldatas
-  description
-  descriptionHash
-  executableFrom
-  expiresAt
-  forVotes
-  proposalId
-  proposalNumber
-  proposalThreshold
-  proposer
-  quorumVotes
-  targets
-  timeCreated
-  title
-  values
-  voteEnd
-  voteStart
-  snapshotBlockNumber
-  transactionHash
-  dao {
-    governorAddress
-    tokenAddress
-  }
-}
-
-fragment ProposalVote on ProposalVote {
-  voter
-  support
-  weight
-  reason
-}
-`;
 
 const Proposals = () => {
   const subgGraphUrl =

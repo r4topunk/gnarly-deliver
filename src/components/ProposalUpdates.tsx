@@ -1,25 +1,22 @@
 "use client";
 
+import UpdateBody from "@/components/UpdateBody";
+import { useProposalUpdates } from "@/hooks/useUpdates";
+import { Proposal, Update } from "@/types";
+import { createClient } from "@/utils/supabase/client";
 import { Box, Button, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import useUpdates, { Update } from "../hooks/useUpdates";
-import { Proposal } from "../types";
-import { createClient } from "../utils/supabase/client";
-import UpdateBody from "./UpdateBody";
 
 interface ProposalUpdatesProps {
   proposal: Proposal;
 }
 
 function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
-  const { updates, setUpdates, fetchUpdates } = useUpdates(proposal.proposalNumber);
+  const { updates, fetchUpdates } = useProposalUpdates(proposal.proposalNumber);
+
   const supabase = createClient();
-  const [author, setAuthor] = useState<string>("");
-  const [comment_body, setComment_body] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
-  const [created_at, setCreated_at] = useState<string>(""); // updated state name
-  const [likes, setLikes] = useState<number>(0);
+  
   const [newComment, setNewComment] = useState<string>("");
   const user_account = useAccount();
   const [userWallet, setUserWallet] = useState<string>("");
@@ -117,7 +114,7 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
         {updates && updates.length > 0
           ? updates
             .sort((a: Update, b: Update) => b.created_at.localeCompare(a.created_at))
-            .map((update: Update) => <UpdateBody fetchUpdates={fetchUpdates} key={update.id} update={update} author={proposal.proposer} />)
+            .map((update: Update) => <UpdateBody key={update.id} serverUpdate={update} />)
           : ""}
       </VStack>
     </Box>
