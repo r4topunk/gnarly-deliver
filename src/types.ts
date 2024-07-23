@@ -12,5 +12,11 @@ export type SubGraphProposal = {
     expiresAt: number;
     snapshotBlockNumber: number;
     transactionHash: string;
+    votes: {
+        voter: string;
+        support: boolean;
+        weight: number;
+        reason: string;
+    }[];
 };
 

@@ -6,6 +6,7 @@ import ProposalList from '@/components/ProposalList';
 import ProposalUpdates from '@/components/ProposalUpdates';
 import { useProposals } from '@/hooks/useProposals';
 import { SubGraphProposal } from '@/types';
+import VoteList from './voteList';
 
 const Proposals = () => {
   const { proposals, loading, error } = useProposals();
@@ -47,7 +48,7 @@ const Proposals = () => {
                   />
                 </TabPanel>
                 <TabPanel>
-                  Votes
+                  <VoteList proposal={selectedProposal} />
                 </TabPanel>
                 <TabPanel>
                   <ProposalUpdates proposal={selectedProposal} />

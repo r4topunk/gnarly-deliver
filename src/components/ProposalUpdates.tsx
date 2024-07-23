@@ -73,14 +73,9 @@ function ProposalUpdates({ proposal }: ProposalUpdatesProps) {
     }
   };
 
-  // console.log('updates:', updates);
-  // console.log('proposal:', proposal);
-  // console.log('userWallet:', userWallet, 'proposal.proposer:', proposal.proposer);
   return (
     <Box w={"full"} id="teste">
-      {userWallet && (
-        <h4 className=" font-semibold mb-2"> Connected User: {userWallet}</h4>
-      )}
+
       {userWallet && proposal.proposer === userWallet.toLowerCase() ? (
         <>
           <textarea

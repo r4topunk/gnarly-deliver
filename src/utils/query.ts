@@ -53,8 +53,6 @@ fragment ProposalVote on ProposalVote {
   reason
 }
 `;
-
-
 export const NOUNSBUILD_PROPOSAL_QUERY = `
   query Proposal($where: ProposalWhereInput) {
     proposals(where: $where) {
@@ -71,7 +69,12 @@ export const NOUNSBUILD_PROPOSAL_QUERY = `
       expiresAt
       snapshotBlockNumber
       transactionHash
+      votes {
+        voter
+        support
+        weight
+        reason
+      }
     }
   }
 `;
-

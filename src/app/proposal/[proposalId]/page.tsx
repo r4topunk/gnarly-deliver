@@ -10,7 +10,6 @@ const ProposalPage = () => {
   const params = useParams();
   const proposalNumber = params.proposalId;
   const proposal = useProposal(String(proposalNumber));
-  console.log(proposal);
 
   if (!proposal) {
     return <Spinner />;

@@ -34,6 +34,7 @@ export const useProposals = () => {
                 expiresAt: proposal.expiresAt,
                 snapshotBlockNumber: proposal.snapshotBlockNumber,
                 transactionHash: proposal.transactionHash,
+                votes: proposal.votes,
             }));
             setProposals(mappedProposals);
         }
