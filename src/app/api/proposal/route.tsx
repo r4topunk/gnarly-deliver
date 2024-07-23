@@ -24,6 +24,7 @@ const VoteResult = () => {
       <div
         style={{
           display: "flex",
+          fontSize: "30px",
         }}
       >
         <h1 style={{ margin: 0 }}>Establish the Pod Media</h1>
@@ -35,6 +36,7 @@ const VoteResult = () => {
           flexWrap: "wrap",
           gap: "20px",
           marginTop: "20px",
+          fontSize: "22px",
         }}
       >
         <div style={{ display: "flex", gap: "6px" }}>
@@ -115,44 +117,36 @@ const VoteResult = () => {
             ></div>
             <span style={{}}>11</span>
           </div>
-        </div>
-        <div
-          style={{
-            flex: 1,
-            minWidth: "200px",
-            textAlign: "center",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span style={{ fontWeight: "bold" }}>Threshold</span>
-          <span style={{ display: "block", fontWeight: "bold" }}>
-            569 votes
-          </span>
-        </div>
-        <div
-          style={{
-            flex: 1,
-            minWidth: "200px",
-            textAlign: "center",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span style={{ fontWeight: "bold" }}>Ends</span>
-          <span style={{ fontWeight: "bold" }}>Dec 31, 1969 - 9:00 PM</span>
-        </div>
-        <div
-          style={{
-            flex: 1,
-            minWidth: "200px",
-            textAlign: "center",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span style={{ fontWeight: "bold" }}>Snapshot taken at block</span>
-          <span style={{ fontWeight: "bold" }}>17321587</span>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <span style={{ fontWeight: "bold" }}>Threshold</span>
+            <span style={{ display: "block", fontWeight: "bold" }}>
+              569 votes
+            </span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <span style={{ fontWeight: "bold" }}>Ends</span>
+            <span style={{ fontWeight: "bold" }}>Dec 31, 1969 - 9:00 PM</span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <span style={{ fontWeight: "bold" }}>Snapshot taken at block</span>
+            <span style={{ fontWeight: "bold" }}>17321587</span>
+          </div>
         </div>
       </div>
     </div>
