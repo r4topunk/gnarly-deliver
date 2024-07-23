@@ -104,7 +104,6 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
   //   fetchAiSummary();
   // }, [proposal.proposalId, proposal.description]);
 
-  console.log(proposal.voteStart, proposal.voteEnd, Date.now() / 1000)
   return (
     <Card direction={{ base: "column", sm: "row" }} overflow="hidden" variant="outline" mb={4}>
 

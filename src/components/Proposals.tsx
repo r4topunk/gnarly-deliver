@@ -1,6 +1,6 @@
 'use client'
-import { useState } from 'react';
-import { Box, Button, Center, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import { Box, Button, Center, Image, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import ProposalDetailView from '@/components/ProposalDetailView';
 import ProposalList from '@/components/ProposalList';
 import ProposalUpdates from '@/components/ProposalUpdates';
@@ -11,10 +11,34 @@ import VoteList from './voteList';
 const Proposals = () => {
   const { proposals, loading, error } = useProposals();
   const [selectedProposal, setSelectedProposal] = useState<SubGraphProposal | null>(null);
+  const [showLoading, setShowLoading] = useState(true);
+
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => {
+        setShowLoading(false);
+      }, 500); // Adjust the delay as needed
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
 
   const handleProposalClick = (proposal: SubGraphProposal) => {
     setSelectedProposal(proposal);
   };
+
+  if (showLoading || loading) {
+    return (
+      <Center>
+        <Box>
+          <Image src="/sktloading.gif" alt="loading" />
+        </Box>
+      </Center>
+    );
+  }
+
+  if (error) {
+    return <Box>Error: {error}</Box>;
+  }
 
   return (
     <>
