@@ -10,14 +10,13 @@ import {
   Heading,
   HStack,
   Image,
+  Progress,
   Stack,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { SubGraphProposal } from "../types";
-import ProposalStatus from "./ProposalStatus";
 import { createClient } from "../utils/supabase/client";
-import getSummary from "../lib/getAiSummary";
 import useMemoizedNnsName from "../hooks/useNNS";
 import useEnsDetails from "../hooks/useEnsAvatar";
 
@@ -30,6 +29,7 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
   const supabase = createClient();
   const userWallet = useMemoizedNnsName(proposal.proposer as `0x${string}`);
   const ensAvatar = useEnsDetails(proposal.proposer as `0x${string}`);
+  console.log(proposal.forVotes, proposal.againstVotes);
 
   const extractImageUrl = (markdown: string): string | null => {
     const imageRegex = /!\[.*?\]\((.*?)\)/;
@@ -55,70 +55,23 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
 
   const [aiSummary, setAiSummary] = useState<string>("");
 
-  // const getAiSummary = async (proposalId: string, proposalDescription: string): Promise<any> => {
-  //   try {
-  //     const { data, error } = await supabase
-  //       .from("updates")
-  //       .select("AiSummary")
-  //       .eq("proposal_id", proposalId)
-  //       .single();
-
-  //     if (error && error.code === "PGRST116") {
-  //       // No rows found
-  //       const aiSummary = await getSummary(proposalDescription);
-  //       console.log("Generated AI summary:", aiSummary);
-
-  //       const { data: updateData, error: updateError } = await supabase
-  //         .from("updates")
-  //         .update({ AiSummary: aiSummary })
-  //         .eq("proposal_id", proposalId);
-
-  //       if (updateError) throw updateError;
-
-  //       console.log("Database updated with new AI summary:", updateData);
-  //       return aiSummary;
-  //     }
-
-  //     if (error) throw error;
-
-  //     if (data && data.AiSummary) {
-  //       console.log("Database summary found:", data);
-  //       return data.AiSummary;
-  //     }
-  //   } catch (err) {
-  //     console.error("Error in getAiSummary:", err);
-  //     throw err;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const fetchAiSummary = async () => {
-  //     try {
-  //       const summary = await getAiSummary(proposal.proposalId, proposal.description);
-  //       setAiSummary(summary);
-  //     } catch (error) {
-  //       console.error("Error fetching AI summary:", error);
-  //     }
-  //   };
-
-  //   fetchAiSummary();
-  // }, [proposal.proposalId, proposal.description]);
+  const totalVotes = proposal.forVotes + proposal.againstVotes;
+  const forVotesPercentage = totalVotes === 0 ? 0 : (proposal.forVotes / totalVotes) * 100;
+  const againstVotesPercentage = totalVotes === 0 ? 0 : (proposal.againstVotes / totalVotes) * 100;
 
   return (
     <Card direction={{ base: "column", sm: "row" }} overflow="hidden" variant="outline" mb={4}>
-
       <Image
         alt="Proposal Image"
         src={avatarUrl}
         objectFit="cover"
         maxW={{ base: "100%", sm: "200px" }}
         onError={handleError}
-        aspectRatio={"1/1"}
       />
 
       <Stack w={"full"}>
         <CardBody display={"flex"}>
-          <VStack>
+          <VStack width="full" spacing={4}>
             <Box width={"full"} marginRight={4}>
               <HStack>
                 <Box ml={2}>
@@ -134,13 +87,19 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
                     )}
                   </HStack>
                 </Box>
-                {/* <Box justifyContent={"flex-end"}><ProposalStatus status={proposal.status} /></Box> */}
               </HStack>
             </Box>
-            <Box display={"flex"} flexDirection={"column"} justifyContent={"space-between"} alignItems={"flex-end"}>
-              {/* <Text fontSize="sm" color="gray.500">
-                {aiSummary}
-              </Text> */}
+            <Box width="full">
+              <HStack>
+                <Text fontSize="sm">For Votes</Text>
+                <span>{proposal.forVotes}</span>
+              </HStack>
+              <Progress colorScheme="green" size="sm" value={forVotesPercentage} mb={2} />
+              <HStack>
+                <Text fontSize="sm">Against Votes</Text>
+                <span>{proposal.againstVotes}</span>
+              </HStack>
+              <Progress colorScheme="red" size="sm" value={againstVotesPercentage} />
             </Box>
           </VStack>
         </CardBody>
