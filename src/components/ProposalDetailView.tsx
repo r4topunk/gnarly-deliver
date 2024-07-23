@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Flex, HStack, Spinner, Text, VStack } from "@chakra-ui/react";
 import moment from "moment";
 import { FaArrowLeft } from "react-icons/fa";
@@ -8,7 +8,8 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { MarkdownRenderers } from "./MarkdownRenderers";
-
+import { useAccount } from "wagmi";
+import { SubGraphProposal } from "@/types";
 
 type VoteStatProps = {
     label: string;
@@ -88,27 +89,31 @@ const AddressInfo: React.FC<AddressInfoProps> = ({ label, address }) => {
     );
 };
 
-type Proposal = {
-    proposalId: string;
-    title: string;
-    proposer: string;
-    status: string;
-    description: string;
-    forVotes: number;
-    againstVotes: number;
-    abstainVotes: number;
-    quorumVotes: number;
-    expiresAt: number;
-    snapshotBlockNumber: number;
-    transactionHash: string;
-};
 
 type ProposalDetailViewProps = {
-    proposal: Proposal;
+    proposal: SubGraphProposal;
     loading: boolean;
 };
 
 const ProposalDetailView: React.FC<ProposalDetailViewProps> = ({ proposal, loading }) => {
+
+    const userWallet = useAccount();
+    // make a function to check if the userwallet.address had already vote on this proposal
+    const [userHasVoted, setUserHasVoted] = useState(false);
+    const [userVote, setUserVote] = useState("");
+    const [userVoteLoading, setUserVoteLoading] = useState(false);
+
+    const voters = proposal.votes.map(vote => vote.voter);
+    console.log(userHasVoted);
+
+    useEffect(() => {
+        if (voters.includes(String(userWallet.address))) {
+            setUserHasVoted(true);
+
+        }
+        console.log(userHasVoted);
+
+    }, [userWallet.address, voters]);
     if (loading) {
         return (
             <Box display="flex" alignItems="center" justifyContent="center" w="100%" h="100%">

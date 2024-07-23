@@ -1,17 +1,17 @@
 import { SubGraphProposal } from "@/types";
 import React from "react";
 import { Box, Text, Flex, Avatar, HStack, Badge } from "@chakra-ui/react";
-import useMemoizedNnsName from "@/hooks/useNNS";
+import useMemoizedNnsName, { formatEthAddress } from "@/hooks/useNNS";
 import useEnsDetails from "@/hooks/useEnsDetails"; // Adjust the import path as necessary
+import { format } from "path";
 
 interface VoteListProps {
     proposal: SubGraphProposal;
 }
 
 const VoteItem = ({ voter, support, weight, reason, totalWeight }: { voter: any, support: any, weight: any, reason: any, totalWeight: number }) => {
-    const nnsName = useMemoizedNnsName(voter as `0x${string}`);
+    const nnsName = useMemoizedNnsName(voter as `0x${string}`) || formatEthAddress(voter as `0x${string}`);
     const { ensAvatar } = useEnsDetails(voter as `0x${string}`);
-    console.log('ensAvatar:', ensAvatar);
     const votePercentage = ((weight / totalWeight) * 100).toFixed(2);
 
     return (
@@ -19,7 +19,7 @@ const VoteItem = ({ voter, support, weight, reason, totalWeight }: { voter: any,
             <Avatar src={ensAvatar ? String(ensAvatar) : "/loading.gif"} name={nnsName} mr={4} />
             <Box>
                 <HStack>
-                    {nnsName} <strong>voted</strong> <Text color={String(support) === "FOR" ? "green" : "red"}>{support} with {weight}</Text>
+                    <Text> {nnsName} </Text><strong>voted</strong> <Text color={String(support) === "FOR" ? "green" : "red"}>{support} with {weight}</Text>
                     <Badge ml={2} colorScheme="blue">{votePercentage}%</Badge>
                 </HStack>
                 <Text><strong>Reason:</strong> {reason || "No reason provided"}</Text>
@@ -35,16 +35,18 @@ export default function VoteList({ proposal }: VoteListProps) {
         <Box>
             <Text fontSize="2xl" mb={4}>Votes</Text>
             {proposal.votes && proposal.votes.length > 0 ? (
-                proposal.votes.map((vote, index) => (
-                    <VoteItem
-                        key={index}
-                        voter={vote.voter}
-                        support={vote.support}
-                        weight={vote.weight}
-                        reason={vote.reason}
-                        totalWeight={totalWeight}
-                    />
-                ))
+                proposal.votes
+                    .sort((a, b) => b.weight - a.weight)
+                    .map((vote, index) => (
+                        <VoteItem
+                            key={index}
+                            voter={vote.voter}
+                            support={vote.support}
+                            weight={vote.weight}
+                            reason={vote.reason}
+                            totalWeight={totalWeight}
+                        />
+                    ))
             ) : (
                 <Text>No votes available.</Text>
             )}

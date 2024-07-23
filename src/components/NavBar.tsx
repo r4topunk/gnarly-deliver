@@ -87,6 +87,21 @@ export default function NavBar() {
             >
               Docs
             </Link>
+            <Link
+              href="/voters"
+              px={3}
+              py={2}
+              rounded="md"
+              fontSize="sm"
+              fontWeight={pathname === "/proposals" ? "bold" : "medium"}
+              color={pathname === "/proposals" ? "white" : "gray.300"}
+              bg={pathname === "/proposals" ? "gray.700" : "transparent"}
+              _hover={{ bg: "gray.700", color: "white" }}
+              _active={{ bg: "gray.700", color: "white" }}
+              as={NextLink}
+            >
+              Voters
+            </Link>
           </Flex>
         </Flex>
         <ConnectButton

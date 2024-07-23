@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import * as React from "react";
 
 export const metadata: Metadata = {
-  title: "Gnars Dao Proposals Update",
-  description: "See the proposal",
+  title: "Gnars Pro",
+  description: "Check the proposal",
   openGraph: {
     images: `/api/proposal`,
   },
