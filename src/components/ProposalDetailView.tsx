@@ -30,8 +30,8 @@ const VoteStat: React.FC<VoteStatProps> = ({ label, value, total, progressColor 
             p={2}
             rounded="md"
         >
-            <Text fontSize="xs" color={progressColor}>{label}</Text>
-            <Text fontSize="sm" color="gray.800" fontWeight="medium">{value}</Text>
+            <Text fontSize="xl" color={progressColor}>{label}</Text>
+            <Text fontSize="xl" color="gray.800" fontWeight="bold">{value}</Text>
             <Box w="100%" h="6px" bg="gray.200" borderRadius="md" mt="1">
                 <Box w={`${percentage}%`} h="6px" bg={progressColor} borderRadius="md" />
             </Box>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Avatar,
+  Badge,
   Box,
   Button,
   Card,
@@ -103,8 +104,10 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
   //   fetchAiSummary();
   // }, [proposal.proposalId, proposal.description]);
 
+  console.log(proposal.voteStart, proposal.voteEnd, Date.now() / 1000)
   return (
     <Card direction={{ base: "column", sm: "row" }} overflow="hidden" variant="outline" mb={4}>
+
       <Image
         alt="Proposal Image"
         src={avatarUrl}
@@ -124,6 +127,12 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
                   <HStack>
                     <Avatar src={ensAvatar?.ensAvatar || "/loading.gif"} size="sm" />
                     <Text py="2">{String(userWallet) || proposal.proposer}</Text>
+
+                    {proposal.voteStart < Date.now() / 1000 && proposal.voteEnd > Date.now() / 1000 ? (
+                      <Badge colorScheme="green">Active</Badge>
+                    ) : (
+                      <Badge colorScheme="grey">Closed</Badge>
+                    )}
                   </HStack>
                 </Box>
                 {/* <Box justifyContent={"flex-end"}><ProposalStatus status={proposal.status} /></Box> */}

@@ -31,6 +31,8 @@ export const useProposals = () => {
                 abstainVotes: proposal.abstainVotes,
                 proposalNumber: proposal.proposalNumber,
                 quorumVotes: proposal.quorumVotes,
+                voteStart: proposal.voteStart,
+                voteEnd: proposal.voteEnd,
                 expiresAt: proposal.expiresAt,
                 snapshotBlockNumber: proposal.snapshotBlockNumber,
                 transactionHash: proposal.transactionHash,

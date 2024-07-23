@@ -38,6 +38,7 @@ const Proposals = () => {
                   <Tab>Proposal Details</Tab>
                   <Tab>Votes</Tab>
                   <Tab>Updates</Tab>
+                  <Tab>Insights</Tab>
                 </Center>
               </TabList>
               <TabPanels>
@@ -52,6 +53,9 @@ const Proposals = () => {
                 </TabPanel>
                 <TabPanel>
                   <ProposalUpdates proposal={selectedProposal} />
+                </TabPanel>
+                <TabPanel>
+                  Insights
                 </TabPanel>
               </TabPanels>
             </Tabs>
