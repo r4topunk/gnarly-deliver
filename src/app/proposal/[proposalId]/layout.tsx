@@ -1,13 +1,22 @@
-import type { Metadata } from "next";
 import * as React from "react";
 
-export const metadata: Metadata = {
-  title: "Gnars Pro",
-  description: "Check the proposal",
-  openGraph: {
-    images: `/api/proposal`,
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: { proposalId: string };
+}) {
+  const proposalNumber = params.proposalId ?? 0;
+
+  console.log({ proposalNumber });
+
+  return {
+    title: "Gnars Pro",
+    description: "Check the proposal",
+    openGraph: {
+      images: `/api/proposal/${proposalNumber}`,
+    },
+  };
+}
 
 export default function RootLayout({
   children,
