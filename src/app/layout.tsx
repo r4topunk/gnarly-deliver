@@ -9,8 +9,8 @@ import "./globals.css";
 const londrina = Londrina_Solid({ weight: "300", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Gnars Dao Proposals Updates",
-  description: "Show us what you did with the money we gave you!",
+  title: "Gnars Pro",
+  description: "Gnars Dao for advanced dao members",
   openGraph: {
     images: `https://gnars.com/images/logo.png`,
   },

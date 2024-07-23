@@ -29,7 +29,6 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
   const supabase = createClient();
   const userWallet = useMemoizedNnsName(proposal.proposer as `0x${string}`);
   const ensAvatar = useEnsDetails(proposal.proposer as `0x${string}`);
-  console.log(proposal.forVotes, proposal.againstVotes);
 
   const extractImageUrl = (markdown: string): string | null => {
     const imageRegex = /!\[.*?\]\((.*?)\)/;
@@ -66,9 +65,9 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
         src={avatarUrl}
         objectFit="cover"
         maxW={{ base: "100%", sm: "200px" }}
+        height={'auto'}
         onError={handleError}
       />
-
       <Stack w={"full"}>
         <CardBody display={"flex"}>
           <VStack width="full" spacing={4}>
@@ -94,12 +93,12 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
                 <Text fontSize="sm">For Votes</Text>
                 <span>{proposal.forVotes}</span>
               </HStack>
-              <Progress colorScheme="green" size="sm" value={forVotesPercentage} mb={2} />
+              <Progress borderRadius={10} colorScheme="green" size="sm" value={forVotesPercentage} mb={2} />
               <HStack>
                 <Text fontSize="sm">Against Votes</Text>
                 <span>{proposal.againstVotes}</span>
               </HStack>
-              <Progress colorScheme="red" size="sm" value={againstVotesPercentage} />
+              <Progress borderRadius={10} colorScheme="red" size="sm" value={againstVotesPercentage} />
             </Box>
           </VStack>
         </CardBody>
