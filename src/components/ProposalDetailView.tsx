@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Flex, HStack, Spinner, Text, VStack } from "@chakra-ui/react";
 import moment from "moment";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaVoteYea } from "react-icons/fa";
 import { RiExternalLinkLine } from "react-icons/ri";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -10,6 +10,10 @@ import remarkGfm from "remark-gfm";
 import { MarkdownRenderers } from "./MarkdownRenderers";
 import { useAccount } from "wagmi";
 import { SubGraphProposal } from "@/types";
+import { useNnsName } from "@nnsprotocol/resolver-wagmi";
+import useMemoizedNnsName, { formatEthAddress } from "@/hooks/useNNS";
+import { MdHowToVote } from "react-icons/md";
+import { set } from "lodash";
 
 type VoteStatProps = {
     label: string;
@@ -67,12 +71,12 @@ const InfoBox: React.FC<InfoBoxProps> = ({ label, subtext, value }) => (
 
 type AddressInfoProps = {
     label: string;
-    address: string;
+    address: any;
 };
 
 const AddressInfo: React.FC<AddressInfoProps> = ({ label, address }) => {
     const href = `https://basescan.io/address/${address}/`;
-
+    const nnsName = useMemoizedNnsName(address as `0x${string}`) || formatEthAddress(address as `0x${string}`);
     if (!address) {
         return null;
     }
@@ -82,7 +86,7 @@ const AddressInfo: React.FC<AddressInfoProps> = ({ label, address }) => {
             <Text fontSize="xs" color="gray.500">{label}</Text>
             <a href={href} target="_blank" rel="noreferrer">
                 <Text fontSize="xs" color="red.500" fontWeight="medium" isTruncated>
-                    {address}
+                    {nnsName}
                 </Text>
             </a>
         </HStack>
@@ -94,26 +98,34 @@ type ProposalDetailViewProps = {
     proposal: SubGraphProposal;
     loading: boolean;
 };
-
+type UserVote = {
+    reason: string;
+    support: boolean;
+    voter: string;
+    weight: number
+}
 const ProposalDetailView: React.FC<ProposalDetailViewProps> = ({ proposal, loading }) => {
-
     const userWallet = useAccount();
-    // make a function to check if the userwallet.address had already vote on this proposal
     const [userHasVoted, setUserHasVoted] = useState(false);
-    const [userVote, setUserVote] = useState("");
-    const [userVoteLoading, setUserVoteLoading] = useState(false);
-
+    const [userVote, setUserVote] = useState<UserVote>();
     const voters = proposal.votes.map(vote => vote.voter);
-    console.log(userHasVoted);
+    const [isProposalExpired, setIsProposalExpired] = useState(false);
 
     useEffect(() => {
-        if (voters.includes(String(userWallet.address))) {
-            setUserHasVoted(true);
-
+        if (proposal.voteEnd < Date.now()) {
+            setIsProposalExpired(true);
+            console.log('Proposal has expired');
         }
-        console.log(userHasVoted);
+    }, [proposal]);
 
+
+    useEffect(() => {
+        if (voters.includes(String(userWallet.address).toLocaleLowerCase())) {
+            setUserHasVoted(true);
+            setUserVote(proposal.votes.find(vote => vote.voter === String(userWallet.address).toLocaleLowerCase()));
+        }
     }, [userWallet.address, voters]);
+
     if (loading) {
         return (
             <Box display="flex" alignItems="center" justifyContent="center" w="100%" h="100%">
@@ -137,12 +149,10 @@ const ProposalDetailView: React.FC<ProposalDetailViewProps> = ({ proposal, loadi
 
     return (
         <VStack spacing={4} align="stretch" w="full">
-
             <VStack spacing={2} align="stretch">
                 {/* <Text fontSize="lg" fontWeight="bold">Proposal {proposal.proposalId}</Text> */}
                 <Flex justifyContent="space-between">
                     <VStack>
-
                         <Text fontSize="36px" fontWeight="semibold">{proposal.title}</Text>
                     </VStack>
                     <a href={`https://basescan.io/tx/${proposal.transactionHash}`} target="_blank" rel="noreferrer">
@@ -151,8 +161,24 @@ const ProposalDetailView: React.FC<ProposalDetailViewProps> = ({ proposal, loadi
                         </Button>
                     </a>
                 </Flex>
-                <AddressInfo label="Proposed by" address={proposal.proposer} />
-
+                <HStack justifyContent={'space-between'}>
+                    <AddressInfo label="Proposed by" address={proposal.proposer as `0x${string}`} />
+                    <Button
+                        leftIcon={userHasVoted ? <FaVoteYea /> : <MdHowToVote />}
+                        variant="outline" size="sm"
+                        bg={userHasVoted ? 'yellow.400' : isProposalExpired ? 'gray.400' : 'green.200'}
+                        disabled={isProposalExpired && !userHasVoted}
+                    >
+                        <Text>
+                            {userHasVoted ?
+                                `Voted with ${userVote?.weight} Gnars` :
+                                isProposalExpired ?
+                                    'Proposal Expired' :
+                                    'Vote'
+                            }
+                        </Text>
+                    </Button>
+                </HStack>
             </VStack>
             <HStack spacing={2}>
                 <VoteStat label="For" value={votes.for} total={totalVotes} progressColor="green.500" />

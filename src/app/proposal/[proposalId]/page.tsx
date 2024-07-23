@@ -1,10 +1,12 @@
 "use client";
 
 import { useParams } from 'next/navigation';
-import { Box, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { Box, Center, HStack, Image, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from '@chakra-ui/react';
 import { useProposal } from '@/hooks/useProposal';
 import ProposalDetailView from '@/components/ProposalDetailView';
 import ProposalUpdates from '@/components/ProposalUpdates';
+import VoteList from '@/components/voteList';
+import Insights from '@/components/Insights';
 
 const ProposalPage = () => {
   const params = useParams();
@@ -12,7 +14,14 @@ const ProposalPage = () => {
   const proposal = useProposal(String(proposalNumber));
 
   if (!proposal) {
-    return <Spinner />;
+    return (
+      <Center>
+        <VStack>
+          <Text>Serching the wild blockchain for the proposal...</Text>
+          <Image src="/sktloading.gif" alt="loading" />
+        </VStack>
+      </Center>
+    );
   }
 
   return (
@@ -20,14 +29,22 @@ const ProposalPage = () => {
       <Tabs w="full">
         <TabList>
           <Tab>Proposal Details</Tab>
+          <Tab>Votes</Tab>
           <Tab>Updates</Tab>
+          <Tab>Insights</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
             <ProposalDetailView proposal={proposal} loading={false} />
           </TabPanel>
           <TabPanel>
+            <VoteList proposal={proposal} />
+          </TabPanel>
+          <TabPanel>
             <ProposalUpdates proposal={proposal} />
+          </TabPanel>
+          <TabPanel>
+            <Insights votes={proposal.votes} />
           </TabPanel>
         </TabPanels>
       </Tabs>

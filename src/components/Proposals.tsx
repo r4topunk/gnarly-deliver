@@ -7,6 +7,7 @@ import ProposalUpdates from '@/components/ProposalUpdates';
 import { useProposals } from '@/hooks/useProposals';
 import { SubGraphProposal } from '@/types';
 import VoteList from './voteList';
+import Insights from './Insights';
 
 const Proposals = () => {
   const { proposals, loading, error } = useProposals();
@@ -79,7 +80,7 @@ const Proposals = () => {
                   <ProposalUpdates proposal={selectedProposal} />
                 </TabPanel>
                 <TabPanel>
-                  Insights
+                  <Insights votes={selectedProposal.votes} />
                 </TabPanel>
               </TabPanels>
             </Tabs>
