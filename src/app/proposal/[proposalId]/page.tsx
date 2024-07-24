@@ -26,23 +26,29 @@ const ProposalPage = () => {
 
   return (
     <Box p={4}>
-      <Tabs w="full">
+      <Tabs w="full" isLazy>
         <TabList>
-          <Tab>Proposal Details</Tab>
-          <Tab>Votes</Tab>
-          <Tab>Updates</Tab>
-          <Tab>Insights</Tab>
+          <Center>
+            <Tab>Proposal Details</Tab>
+            <Tab>Votes</Tab>
+            <Tab>Updates</Tab>
+            <Tab>Insights</Tab>
+          </Center>
         </TabList>
         <TabPanels>
-          <TabPanel>
-            <ProposalDetailView proposal={proposal} loading={false} />
-          </TabPanel>
+          <Center>
+            <TabPanel width={{ base: '100%', md: '70%' }}>
+              <ProposalDetailView proposal={proposal} loading={false} />
+            </TabPanel>
+          </Center>
           <TabPanel>
             <VoteList proposal={proposal} />
           </TabPanel>
-          <TabPanel>
-            <ProposalUpdates proposal={proposal} />
-          </TabPanel>
+          <Center>
+            <TabPanel width={{ base: '100%', md: '70%' }}>
+              <ProposalUpdates proposal={proposal} />
+            </TabPanel>
+          </Center>
           <TabPanel>
             <Insights votes={proposal.votes} />
           </TabPanel>

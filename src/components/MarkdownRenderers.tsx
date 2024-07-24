@@ -31,7 +31,7 @@ export const MarkdownRenderers = {
                 title={title}
                 style={{
                     display: "inline-block",
-                    maxWidth: "100%",
+                    width: "100%",
                     height: "100%",
                     maxHeight: "345px",
                     borderRadius: "10px",
@@ -48,7 +48,7 @@ export const MarkdownRenderers = {
     ),
     a: ({ href, children, ...props }: RendererProps) => (
         <a
-            style={{ color: "blue", textWrap: "wrap", wordBreak: "break-all" }}
+            style={{ color: "#ffe762", textWrap: "wrap", wordBreak: "break-all" }}
             href={href}
             {...props}
         >
@@ -121,10 +121,12 @@ export const MarkdownRenderers = {
             <ul
                 {...props}
                 data-ordered={listType}
-                style={{ padding: "5%", paddingLeft: "10%", color: "darkblue" }}
+                style={{
+                    paddingLeft: "5px", color: "#fb922b"
+                }}
             >
                 {children}
-            </ul>
+            </ul >
         );
     },
     sub: ({ children, ...props }: RendererProps) => (
