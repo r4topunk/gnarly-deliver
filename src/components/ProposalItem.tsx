@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Badge,
@@ -7,7 +6,6 @@ import {
   Card,
   CardBody,
   CardFooter,
-  Heading,
   HStack,
   Image,
   Progress,
@@ -15,10 +13,11 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import useEnsDetails from "../hooks/useEnsAvatar";
+import useMemoizedNnsName from "../hooks/useNNS";
 import { SubGraphProposal } from "../types";
 import { createClient } from "../utils/supabase/client";
-import useMemoizedNnsName from "../hooks/useNNS";
-import useEnsDetails from "../hooks/useEnsAvatar";
 
 type ProposalItemProps = {
   proposal: SubGraphProposal;
@@ -55,19 +54,37 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
   const [aiSummary, setAiSummary] = useState<string>("");
 
   const totalVotes = proposal.forVotes + proposal.againstVotes;
-  const forVotesPercentage = totalVotes === 0 ? 0 : (proposal.forVotes / totalVotes) * 100;
-  const againstVotesPercentage = totalVotes === 0 ? 0 : (proposal.againstVotes / totalVotes) * 100;
+  const forVotesPercentage =
+    totalVotes === 0 ? 0 : (proposal.forVotes / totalVotes) * 100;
+  const againstVotesPercentage =
+    totalVotes === 0 ? 0 : (proposal.againstVotes / totalVotes) * 100;
 
   return (
-    <Card direction={{ base: "column", sm: "row" }} overflow="hidden" variant="outline" mb={4}>
-      <Image
-        alt="Proposal Image"
-        src={avatarUrl}
-        objectFit="cover"
-        maxW={{ base: "100%", sm: "200px" }}
-        height={'auto'}
-        onError={handleError}
-      />
+    <Card
+      direction={{ base: "column", sm: "row" }}
+      overflow="hidden"
+      variant="outline"
+      mb={4}
+    >
+      <Box
+        width={{ base: "100%", sm: "300px" }}
+        height={{ base: "160px", sm: "auto" }}
+        position="relative"
+        overflow="hidden"
+        backgroundColor="gray.200"
+      >
+        <Image
+          alt="Proposal Image"
+          src={avatarUrl}
+          objectFit="cover"
+          width="100%"
+          height="100%"
+          position="absolute"
+          top="0"
+          left="0"
+          onError={handleError}
+        />
+      </Box>
       <Stack w={"full"}>
         <CardBody display={"flex"}>
           <VStack width="full" spacing={4}>
@@ -76,10 +93,16 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
                 <Box ml={2}>
                   <Text fontSize="26px">{proposal.title}</Text>
                   <HStack>
-                    <Avatar src={ensAvatar?.ensAvatar || "/loading.gif"} size="sm" />
-                    <Text py="2">{String(userWallet) || proposal.proposer}</Text>
+                    <Avatar
+                      src={ensAvatar?.ensAvatar || "/loading.gif"}
+                      size="sm"
+                    />
+                    <Text py="2">
+                      {String(userWallet) || proposal.proposer}
+                    </Text>
 
-                    {proposal.voteStart < Date.now() / 1000 && proposal.voteEnd > Date.now() / 1000 ? (
+                    {proposal.voteStart < Date.now() / 1000 &&
+                    proposal.voteEnd > Date.now() / 1000 ? (
                       <Badge colorScheme="green">Active</Badge>
                     ) : (
                       <Badge colorScheme="grey">Closed</Badge>
@@ -93,17 +116,33 @@ const ProposalItem: React.FC<ProposalItemProps> = ({ proposal, onClick }) => {
                 <Text fontSize="sm">For Votes</Text>
                 <span>{proposal.forVotes}</span>
               </HStack>
-              <Progress borderRadius={10} colorScheme="green" size="sm" value={forVotesPercentage} mb={2} />
+              <Progress
+                borderRadius={10}
+                colorScheme="green"
+                size="sm"
+                value={forVotesPercentage}
+                mb={2}
+              />
               <HStack>
                 <Text fontSize="sm">Against Votes</Text>
                 <span>{proposal.againstVotes}</span>
               </HStack>
-              <Progress borderRadius={10} colorScheme="red" size="sm" value={againstVotesPercentage} />
+              <Progress
+                borderRadius={10}
+                colorScheme="red"
+                size="sm"
+                value={againstVotesPercentage}
+              />
             </Box>
           </VStack>
         </CardBody>
-        <CardFooter justify={"right"}>
-          <Button variant="solid" colorScheme="yellow" onClick={onClick}>
+        <CardFooter justify={"right"} paddingTop={{ base: "0", sm: "auto" }}>
+          <Button
+            variant="solid"
+            colorScheme="yellow"
+            onClick={onClick}
+            width={{ base: "100%", sm: "auto" }}
+          >
             View Details
           </Button>
         </CardFooter>

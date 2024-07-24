@@ -5,8 +5,10 @@ import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function NavBar() {
-  const [isMobile] = useMediaQuery("(min-width: 768px)");
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
   const pathname = usePathname();
+
+  console.log({ isMobile });
 
   return (
     <Box bg="gray.800" px={4}>
@@ -57,51 +59,55 @@ export default function NavBar() {
             >
               Proposals
             </Link>
-            <Link
-              href="https://nouns.build/dao/base/0x880fb3cf5c6cc2d7dfc13a993e839a9411200c17/6030?tab=activity"
-              px={3}
-              py={2}
-              rounded="md"
-              fontSize="sm"
-              fontWeight="medium"
-              color="gray.300"
-              _hover={{ bg: "gray.700", color: "white" }}
-              _active={{ bg: "gray.700", color: "white" }}
-              isExternal
-              as={NextLink}
-            >
-              Auction
-            </Link>
-            <Link
-              href="https://gnarsdocs.vercel.app"
-              px={3}
-              py={2}
-              rounded="md"
-              fontSize="sm"
-              fontWeight="medium"
-              color="gray.300"
-              _hover={{ bg: "gray.700", color: "white" }}
-              _active={{ bg: "gray.700", color: "white" }}
-              isExternal
-              as={NextLink}
-            >
-              Docs
-            </Link>
-            <Link
-              href="/voters"
-              px={3}
-              py={2}
-              rounded="md"
-              fontSize="sm"
-              fontWeight={pathname === "/proposals" ? "bold" : "medium"}
-              color={pathname === "/proposals" ? "white" : "gray.300"}
-              bg={pathname === "/proposals" ? "gray.700" : "transparent"}
-              _hover={{ bg: "gray.700", color: "white" }}
-              _active={{ bg: "gray.700", color: "white" }}
-              as={NextLink}
-            >
-              Voters
-            </Link>
+            {!isMobile && (
+              <>
+                <Link
+                  href="https://nouns.build/dao/base/0x880fb3cf5c6cc2d7dfc13a993e839a9411200c17/6030?tab=activity"
+                  px={3}
+                  py={2}
+                  rounded="md"
+                  fontSize="sm"
+                  fontWeight="medium"
+                  color="gray.300"
+                  _hover={{ bg: "gray.700", color: "white" }}
+                  _active={{ bg: "gray.700", color: "white" }}
+                  isExternal
+                  as={NextLink}
+                >
+                  Auction
+                </Link>
+                <Link
+                  href="https://gnarsdocs.vercel.app"
+                  px={3}
+                  py={2}
+                  rounded="md"
+                  fontSize="sm"
+                  fontWeight="medium"
+                  color="gray.300"
+                  _hover={{ bg: "gray.700", color: "white" }}
+                  _active={{ bg: "gray.700", color: "white" }}
+                  isExternal
+                  as={NextLink}
+                >
+                  Docs
+                </Link>
+                <Link
+                  href="/voters"
+                  px={3}
+                  py={2}
+                  rounded="md"
+                  fontSize="sm"
+                  fontWeight={pathname === "/proposals" ? "bold" : "medium"}
+                  color={pathname === "/proposals" ? "white" : "gray.300"}
+                  bg={pathname === "/proposals" ? "gray.700" : "transparent"}
+                  _hover={{ bg: "gray.700", color: "white" }}
+                  _active={{ bg: "gray.700", color: "white" }}
+                  as={NextLink}
+                >
+                  Voters
+                </Link>
+              </>
+            )}
           </Flex>
         </Flex>
         <ConnectButton
